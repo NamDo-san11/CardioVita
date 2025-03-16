@@ -35,7 +35,7 @@ const Login = () => {
         });
     };
 
-    // ?Si el usuario ya está autenticado, redirigir automáticamente
+    // ! Si el usuario ya está autenticado, redirigir automáticamente
     if (user) {
         navigate("/inicio");
     }
