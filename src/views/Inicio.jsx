@@ -16,7 +16,7 @@ const Inicio = () => {
         <br />
         <br />
         <h1>Inicio</h1>
-        <Button  onClick={() => handleNavigate("/sintomas")} >TABLA SINTOMAS</Button>
+        <Button  onClick={() => handleNavigate("/Sintomas")} >TABLA SINTOMAS</Button>
         </Container>
     )
 }

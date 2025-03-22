@@ -4,7 +4,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Login from './views/Login'
 import Encabezado from "./components/Encabezado";
 import Inicio from "./views/Inicio";
-import Sintomas from "./views/Sintomas";
+import SintomasView from "./views/SintomasView";
 
 import './App.css'
 
@@ -20,7 +20,7 @@ function App() {
                 
                 <Route path="/" element={<Login />} />
                 <Route path="/inicio" element={<ProtectedRoute element={<Inicio />} />} />
-                <Route path="/sintomas" element={<ProtectedRoute element={<Sintomas />} />} />
+                <Route path="/sintomas" element={<ProtectedRoute element={<SintomasView />} />} />
               </Routes>
             </main>
           </div>
