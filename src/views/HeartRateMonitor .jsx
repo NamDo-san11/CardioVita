@@ -7,14 +7,20 @@ export default function HeartRateMonitor() {
   const [dataPoints, setDataPoints] = useState([]);
   const [isMeasuring, setIsMeasuring] = useState(false);
   const [status, setStatus] = useState("Coloca tu dedo sobre la cámara y presiona Iniciar");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (isMeasuring) {
-      navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+      navigator.mediaDevices.getUserMedia({ video: true })
         .then(stream => {
           videoRef.current.srcObject = stream;
           videoRef.current.play();
           setStatus("Midiendo... mantén el dedo sobre la cámara");
+        })
+        .catch(err => {
+          console.error("Error accediendo a la cámara:", err);
+          setError("No se pudo acceder a la cámara. Asegúrate de conceder permisos y que tu navegador esté en HTTPS.");
+          setIsMeasuring(false);
         });
     } else {
       const tracks = videoRef.current?.srcObject?.getTracks();
@@ -22,6 +28,7 @@ export default function HeartRateMonitor() {
       setStatus("Coloca tu dedo sobre la cámara y presiona Iniciar");
       setBpm(null);
       setDataPoints([]);
+      setError(null);
     }
   }, [isMeasuring]);
 
@@ -79,9 +86,17 @@ export default function HeartRateMonitor() {
       <video ref={videoRef} width="300" height="200" className="hidden" />
       <canvas ref={canvasRef} width="300" height="200" className="hidden" />
 
-      <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 rounded">
-        <p>{status}</p>
-      </div>
+      {error && (
+        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
+          <p>{error}</p>
+        </div>
+      )}
+
+      {!error && (
+        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 rounded">
+          <p>{status}</p>
+        </div>
+      )}
 
       <button
         onClick={() => setIsMeasuring(prev => !prev)}

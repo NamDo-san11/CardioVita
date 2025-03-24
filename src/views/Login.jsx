@@ -27,7 +27,7 @@ const Login = () => {
             localStorage.setItem("adminEmail", email);
             localStorage.setItem("adminPassword", password);
             // Redirigir después de iniciar sesión
-            navigate("/inicio");
+            navigate("/medicina");
         })
         .catch((error) => {
             setError("Error de autenticación. Verifica tus credenciales.");
@@ -37,7 +37,7 @@ const Login = () => {
 
     // ! Si el usuario ya está autenticado, redirigir automáticamente
     if (user) {
-        navigate("/inicio");
+        navigate("/medicina");
     }
 
     return (
