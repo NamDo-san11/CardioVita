@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import logo from "../assets/react.svg";
+import logo from "../assets/logo.png";
 import { useAuth } from "../database/authcontext";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import "../App.css";
@@ -45,7 +45,7 @@ const Encabezado = () => {
         <Navbar expand="sm" fixed="top" className="color-navbar">
         <Container>
             <Navbar.Brand onClick={() => handleNavigate("/inicio")} className="text-white" style={{ cursor: "pointer" }}>
-            <img alt="" src={logo} width="30" height="30" className="d-inline-block align-top" />{" "}
+            <img alt="" src={logo} width="40" height="40" className="d-inline-block align-top" />{" "}
             <strong>Cardiovita</strong>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="offcanvasNavbar-expand-sm" onClick={handleToggle} />
