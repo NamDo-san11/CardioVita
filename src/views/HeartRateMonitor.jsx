@@ -7,10 +7,14 @@ import {
     LinearScale,
     CategoryScale,
 } from "chart.js";
+import { db } from "../database/firebaseconfig";
+import { addDoc, collection, Timestamp } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import "../styles/CardioVitaMedicion.css";
 
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale);
 
-export default function HeartRateMonitor() {
+export default function HeartRateCardioVita() {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [bpm, setBpm] = useState(null);
@@ -18,7 +22,10 @@ export default function HeartRateMonitor() {
     const [isMeasuring, setIsMeasuring] = useState(false);
     const [status, setStatus] = useState("Coloca tu dedo sobre la cámara y presiona Iniciar");
     const [error, setError] = useState(null);
-    const [useTorch, setUseTorch] = useState(false);
+    const [saved, setSaved] = useState(false);
+
+    const SAMPLE_DURATION = 150;
+    const PEAK_THRESHOLD = 1;
 
     useEffect(() => {
         let stream;
@@ -32,13 +39,6 @@ export default function HeartRateMonitor() {
             },
             };
             stream = await navigator.mediaDevices.getUserMedia(constraints);
-
-            const track = stream.getVideoTracks()[0];
-            const capabilities = track.getCapabilities();
-
-            if (useTorch && capabilities.torch) {
-            await track.applyConstraints({ advanced: [{ torch: true }] });
-            }
         } catch (err) {
             console.warn("Cámara trasera no disponible, usando cámara por defecto");
             try {
@@ -66,7 +66,7 @@ export default function HeartRateMonitor() {
             videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
         }
         };
-    }, [isMeasuring, useTorch]);
+    }, [isMeasuring]);
 
     useEffect(() => {
         let interval;
@@ -85,26 +85,48 @@ export default function HeartRateMonitor() {
             }
 
             const avgRed = reds.reduce((a, b) => a + b, 0) / reds.length;
-            setDataPoints((prev) => [...prev.slice(-100), avgRed]);
+            setDataPoints((prev) => [...prev.slice(-SAMPLE_DURATION + 1), avgRed]);
         }, 100);
         }
         return () => clearInterval(interval);
     }, [isMeasuring]);
 
     useEffect(() => {
-        if (dataPoints.length >= 100) {
+        if (dataPoints.length >= SAMPLE_DURATION) {
         let peaks = 0;
         for (let i = 1; i < dataPoints.length - 1; i++) {
             if (dataPoints[i] > dataPoints[i - 1] && dataPoints[i] > dataPoints[i + 1]) {
             peaks++;
             }
         }
-        const bpmEstimate = (peaks * 60) / 10; // Aproximado para 10 segundos
+        const bpmEstimate = (peaks * 60) / 15; // 15s
         setBpm(Math.round(bpmEstimate));
         setStatus("Medición completa ✅");
         setIsMeasuring(false);
         }
     }, [dataPoints]);
+
+    useEffect(() => {
+        async function guardarEnFirestore() {
+        const user = getAuth().currentUser;
+        if (!user || bpm === null) return;
+
+        try {
+            await addDoc(collection(db, "mediciones"), {
+            uid: user.uid,
+            fechaHora: Timestamp.now(),
+            bpm: bpm,
+            });
+            setSaved(true);
+        } catch (err) {
+            console.error("Error al guardar en Firestore:", err);
+        }
+        }
+
+        if (bpm !== null) {
+        guardarEnFirestore();
+        }
+    }, [bpm]);
 
     const chartData = {
         labels: dataPoints.map((_, i) => i),
@@ -113,61 +135,54 @@ export default function HeartRateMonitor() {
             label: "Señal captada",
             data: dataPoints,
             fill: false,
-            borderColor: "#f43f5e",
+            borderColor: "#E1CBD7",
             tension: 0.3,
         },
         ],
     };
 
     return (
-        <div className="p-4 text-center">
-        <h1 className="text-xl font-bold mb-2">Medidor de Frecuencia Cardíaca</h1>
+        <div className="heart-card">
+        <br />
+        <h1 className="heart-title">Frecuencia Cardíaca</h1>
+
         <video ref={videoRef} width="300" height="200" className="hidden" />
         <canvas ref={canvasRef} width="300" height="200" className="hidden" />
 
-        {error && <p className="text-red-600 mb-4">{error}</p>}
+        {error && <p className="text-red-400">{error}</p>}
+        <p className="heart-status">{status}</p>
 
-        <p className="mb-4">{status}</p>
-
-        <div className="flex justify-center gap-4 mb-4">
+        <div style={{ textAlign: "center" }}>
             <button
             onClick={() => {
                 setBpm(null);
+                setSaved(false);
                 setDataPoints([]);
                 setError(null);
                 setIsMeasuring(true);
                 setStatus("Coloca tu dedo sobre la cámara");
             }}
             disabled={isMeasuring}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+            className="heart-button"
             >
             {isMeasuring ? "Midiendo..." : "Iniciar Medición"}
             </button>
-
-            <label className="flex items-center gap-2">
-            <input
-                type="checkbox"
-                checked={useTorch}
-                onChange={() => setUseTorch(!useTorch)}
-                disabled={isMeasuring}
-            />
-            Activar Flash
-            </label>
         </div>
 
-        {bpm && (
-            <div className="mt-4">
-            <p className="text-lg">BPM estimado:</p>
-            <p className="text-4xl font-bold text-red-600">{bpm}</p>
+        {bpm !== null && (
+            <div className="heart-bpm">
+            <p>BPM estimado:</p>
+            <div>{bpm}</div>
+            {saved && <p style={{ color: "lightgreen", fontSize: "0.9rem" }}>Guardado en Firestore ✅</p>}
             </div>
         )}
 
         {dataPoints.length > 10 && (
-            <div className="mt-6">
-            <h2 className="text-lg font-semibold mb-2">Señal captada</h2>
+            <div className="heart-chart">
+            <h2 style={{ textAlign: "center" }}>Señal captada</h2>
             <Line data={chartData} options={{ responsive: true, scales: { x: { display: false }, y: { beginAtZero: false } } }} />
             </div>
         )}
         </div>
     );
-}
+    }

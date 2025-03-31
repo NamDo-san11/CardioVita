@@ -1,0 +1,55 @@
+/* CardioVitaMedicion.css */
+
+.heart-card {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #26425A;
+    color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  .heart-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #E1CBD7;
+  }
+  
+  .heart-button {
+    background-color: #C3EBB4;
+    color: #26425A;
+    font-weight: bold;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .heart-button:hover {
+    background-color: #E1CBD7;
+  }
+  
+  .heart-status {
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-style: italic;
+  }
+  
+  .heart-bpm {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #C3EBB4;
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .heart-chart {
+    margin-top: 2rem;
+    border-top: 1px solid #C3EBB4;
+    padding-top: 1rem;
+  }
+  
