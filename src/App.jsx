@@ -20,7 +20,7 @@ function App() {
                 <Route path="/" element={<Login />} />
                 <Route path="/inicio" element={<ProtectedRoute element={<Inicio />} />} />
                 <Route path="/sintomas" element={<ProtectedRoute element={<SintomasView />} />} />
-                <Route pat="/medicina" element={<ProtectedRoute element={<HeartRateMonitor/>}/>}/>
+                <Route path="/corazon" element={<ProtectedRoute element={<HeartRateMonitor />} />} />
               </Routes>
             </main>
         </Router>

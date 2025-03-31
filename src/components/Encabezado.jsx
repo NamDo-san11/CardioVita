@@ -46,6 +46,7 @@ const Encabezado = () => {
         <Container>
             <Navbar.Brand onClick={() => handleNavigate("/inicio")} className="text-white" style={{ cursor: "pointer" }}>
             <img alt="" src={logo} width="40" height="40" className="d-inline-block align-top" />{" "}
+          
             <strong>Cardiovita</strong>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="offcanvasNavbar-expand-sm" onClick={handleToggle} />

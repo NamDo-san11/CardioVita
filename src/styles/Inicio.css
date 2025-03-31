@@ -1,0 +1,27 @@
+.inicio-wrapper {
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .inicio-header {
+    background-color: #1e2a38;
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+  }
+  
+  .inicio-section {
+    padding: 60px 0;
+  }
+  
+  .dark-section {
+    background-color: #2c3e50;
+    color: white;
+  }
+  
+  .inicio-footer {
+    background-color: #1e2a38;
+    color: #ccc;
+    padding: 20px 0;
+    margin-top: 60px;
+  }
+  
