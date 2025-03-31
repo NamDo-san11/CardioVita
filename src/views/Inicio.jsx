@@ -41,7 +41,7 @@ const Inicio = () => {
             <Container>
             <Row className="align-items-center">
                 <Col md={6}>
-                <h3>Controla tu presión arterial con tecnología</h3>
+                <h3>Controla tu Frecuencia Cardiaca con tecnología</h3>
                 <p>
                     Nuestra aplicación te permite registrar y analizar tus síntomas, estado de ánimo y actividad diaria para un mejor manejo de la hipertensión.
                 </p>
