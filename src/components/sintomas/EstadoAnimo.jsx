@@ -1,5 +1,5 @@
 const EstadoAnimo = ({ selected, setSelected }) => {
-    const opciones = ["Tranquilo", "Feliz", "Emocionado", "Deprimido", "Decaído"];
+    const opciones = ["😊 Tranquilo", "😎 Feliz", "😃 Emocionado", " 🥲 Deprimido", "😕 Decaído"];
     
     const handleChange = (opcion) => {
         setSelected((prev) =>

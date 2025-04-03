@@ -43,7 +43,12 @@ const Inicio = () => {
                 <Col md={6}>
                 <h3>Controla tu Frecuencia Cardiaca con tecnología</h3>
                 <p>
-                    Nuestra aplicación te permite registrar y analizar tus síntomas, estado de ánimo y actividad diaria para un mejor manejo de la hipertensión.
+                Monitorea tu ritmo cardíaco usando solo la cámara de tu dispositivo.
+                Coloca tu dedo sobre la cámara y detecta tus BPM de forma rápida, segura y sin dispositivos externos.
+                Los resultados se almacenan automáticamente para llevar un mejor control de tu salud cardiovascular.
+                </p>
+                <p>
+                Este monitoreo no es totalmente exacto, tiene un margen de error y cosas como el movimiento y entorno puede influir en el resultado
                 </p>
                 <Button variant="outline-light" onClick={() => handleNavigate("/corazon")}>
                     Comenzar Ahora
@@ -54,7 +59,7 @@ const Inicio = () => {
                     src={Imagen}
                     width="400" height="400"
                     alt="App CardioVita"
-                    className="border d-inline-block align-top img-fluid rounded"
+                    className="border d-inline-block align-top img-fluid rounded inicio-imagen"
                 />
                 </Col>
             </Row>

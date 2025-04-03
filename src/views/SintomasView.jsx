@@ -1,6 +1,9 @@
 import { useState } from "react";
 import Cuestionario from "../components/sintomas/Cuestionario";
 import HistorialSintomas from "../components/sintomas/HistorialSintomas";
+import { Container, Row, Col, Button, Card } from "react-bootstrap";
+import { Plus } from "react-bootstrap-icons";
+import "../styles/SintomasView.css"
 
 const SintomasView = () => {
   const [editarDatos, setEditarDatos] = useState(null);
@@ -12,30 +15,55 @@ const SintomasView = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <Container className="mt-5">
+      <Row className="justify-content-center mb-4">
+        <Col md={8} className="text-center">
         <br />
-        <br />
-      <h1>Registro de Síntomas</h1>
+          <h1 className="fw-bold text-primary">🩺 Registro de Síntomas</h1>
+          <p className="text-muted">
+            Lleva un control diario de tu estado físico y emocional.
+          </p>
+        </Col>
+      </Row>
+
       {mostrarCuestionario || editarDatos ? (
-        <Cuestionario
-          datosIniciales={editarDatos}
-          onFinish={() => {
-            setEditarDatos(null);
-            setMostrarCuestionario(false);
-          }}
-        />
+        <Row className="justify-content-center">
+          <Col md={10}>
+            <Card className="shadow p-4">
+              <Card.Body>
+                <Cuestionario
+                  datosIniciales={editarDatos}
+                  onFinish={() => {
+                    setEditarDatos(null);
+                    setMostrarCuestionario(false);
+                  }}
+                />
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
       ) : (
         <>
-          <button className="btn btn-success mb-3" onClick={handleNuevaEntrada}>
-            + Agregar Registro
-          </button>
-          <HistorialSintomas onEdit={(item) => {
-            setEditarDatos(item);
-            setMostrarCuestionario(true);
-          }} />
+          <Row className="mb-3 text-center">
+            <Col>
+              <Button variant="success" onClick={handleNuevaEntrada}>
+                <Plus className="me-2" /> Agregar Nuevo Registro
+              </Button>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <HistorialSintomas
+                onEdit={(item) => {
+                  setEditarDatos(item);
+                  setMostrarCuestionario(true);
+                }}
+              />
+            </Col>
+          </Row>
         </>
       )}
-    </div>
+    </Container>
   );
 };
 

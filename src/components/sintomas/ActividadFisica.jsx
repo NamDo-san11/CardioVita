@@ -1,5 +1,5 @@
 const ActividadFisica = ({ selected, setSelected }) => {
-    const opciones = ["Trabajo", "Hizo ejercicio", "No hizo ejercicio", "Mucha actividad", "Poca actividad"];
+    const opciones = ["🏋️‍♂️ Trabajo", "⛹️‍♂️ Hizo ejercicio", "🚶‍♂️‍➡️ No hizo ejercicio", "🏃‍♂️‍➡️ Mucha actividad", "🧘‍♀️ Poca actividad"];
 
     const handleChange = (opcion) => {
         setSelected((prev) =>

@@ -1,0 +1,14 @@
+.card {
+    border-radius: 20px;
+  }
+  
+  button.btn-success {
+    font-weight: 500;
+    border-radius: 12px;
+    padding: 10px 20px;
+  }
+  
+  h1.fw-bold {
+    font-size: 2.2rem;
+  }
+  

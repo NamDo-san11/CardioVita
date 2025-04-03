@@ -1,5 +1,5 @@
 const Sintomas = ({ selected, setSelected }) => {
-    const opciones = ["Dolor de cabeza", "Mareos", "Fatiga", "Sangrado nasal", "Náuseas"];
+    const opciones = ["🤕 Dolor de cabeza", "😵‍💫 Mareos", "🫨 Fatiga", "🩸Sangrado nasal", "🤢 Náuseas"];
     
         const handleChange = (opcion) => {
         setSelected((prev) =>

@@ -23,6 +23,8 @@ export default function HeartRateCardioVita() {
     const [status, setStatus] = useState("Coloca tu dedo sobre la cámara y presiona Iniciar");
     const [error, setError] = useState(null);
     const [saved, setSaved] = useState(false);
+    const [useTorch, setUseTorch] = useState(true);
+
 
     const SAMPLE_DURATION = 150;
     const PEAK_THRESHOLD = 1;
@@ -55,6 +57,11 @@ export default function HeartRateCardioVita() {
             videoRef.current.play();
             setStatus("Midiendo... mantén el dedo sobre la cámara");
         }
+        
+        if (useTorch && capabilities.torch) {
+            await track.applyConstraints({ advanced: [{ torch: true }] });
+        }
+        
         }
 
         if (isMeasuring) {
@@ -167,6 +174,18 @@ export default function HeartRateCardioVita() {
             >
             {isMeasuring ? "Midiendo..." : "Iniciar Medición"}
             </button>
+            <div className="torch-switch">
+                <span className="switch-label">Flash</span>
+                <label className="switch">
+                    <input
+                    type="checkbox"
+                    checked={useTorch}
+                    onChange={() => setUseTorch(!useTorch)}
+                    disabled={isMeasuring}
+                    />
+                    <span className="slider"></span>
+                </label>
+            </div>
         </div>
 
         {bpm !== null && (
