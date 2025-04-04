@@ -170,7 +170,7 @@ export default function HeartRateCardioVita() {
                 setStatus("Coloca tu dedo sobre la cámara");
             }}
             disabled={isMeasuring}
-            className="heart-button"
+            className="btn btn-outline-light"
             >
             {isMeasuring ? "Midiendo..." : "Iniciar Medición"}
             </button>

@@ -1,7 +1,7 @@
 const OtraAnomalia = ({ otraAnomalia, setOtraAnomalia }) => {
     return (
     <div className="mt-3">
-        <label>Otra Anomalía (Opcional):</label>
+        <label style={{color:"#26425A"}} >Otra Anomalía (Opcional):</label>
         <input
         type="text"
         className="form-control"

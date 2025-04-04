@@ -5,7 +5,7 @@
     margin: 2rem auto;
     padding: 2rem;
     background-color: #26425A;
-    color: #fff;
+    color: #ffffff;
     border-radius: 20px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
   }
@@ -14,12 +14,12 @@
     text-align: center;
     font-size: 2rem;
     margin-bottom: 1rem;
-    color: #E1CBD7;
+    color: #fcfcfc;
   }
   
   .heart-button {
-    background-color: #C3EBB4;
-    color: #26425A;
+    background-color: #3b893a;
+    color: #fefefe;
     font-weight: bold;
     padding: 0.75rem 1.5rem;
     border: none;
@@ -29,7 +29,7 @@
   }
   
   .heart-button:hover {
-    background-color: #E1CBD7;
+    background-color: #ffffff;
   }
   
   .heart-status {
@@ -42,14 +42,14 @@
   .heart-bpm {
     font-size: 3rem;
     font-weight: bold;
-    color: #C3EBB4;
+    color: #ffffff;
     text-align: center;
     margin-top: 1rem;
   }
   
   .heart-chart {
     margin-top: 2rem;
-    border-top: 1px solid #C3EBB4;
+    border-top: 1px solid #ffffff;
     padding-top: 1rem;
   }
   .torch-switch {
@@ -62,7 +62,7 @@
   
   .switch-label {
     font-weight: bold;
-    color: #C3EBB4;
+    color: #ffffff;
   }
   
   .switch {
@@ -85,7 +85,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: #ffffff;
     transition: 0.4s;
     border-radius: 34px;
   }

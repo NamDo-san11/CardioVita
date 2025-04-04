@@ -19,7 +19,7 @@ const SintomasView = () => {
       <Row className="justify-content-center mb-4">
         <Col md={8} className="text-center">
         <br />
-          <h1 className="fw-bold text-primary">🩺 Registro de Síntomas</h1>
+          <h1 className="fw-bold text-edit">🩺 Registro de Síntomas</h1>
           <p className="text-muted">
             Lleva un control diario de tu estado físico y emocional.
           </p>

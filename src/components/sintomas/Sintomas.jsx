@@ -9,7 +9,7 @@ const Sintomas = ({ selected, setSelected }) => {
     
         return (
         <div className="mt-3">
-            <h5>Síntomas</h5>
+            <h5 style={{color:"#26425A"}}>Síntomas</h5>
             {opciones.map((opcion) => (
             <div key={opcion} className="form-check">
                 <input

@@ -6,6 +6,7 @@ import Encabezado from "./components/Encabezado";
 import Inicio from "./views/Inicio";
 import SintomasView from "./views/SintomasView";
 import HeartRateMonitor from "./views/HeartRateMonitor";
+import PresionArterialView from "./views/PresionArterialView";
 
 import './App.css'
 
@@ -21,6 +22,7 @@ function App() {
                 <Route path="/inicio" element={<ProtectedRoute element={<Inicio />} />} />
                 <Route path="/sintomas" element={<ProtectedRoute element={<SintomasView />} />} />
                 <Route path="/corazon" element={<ProtectedRoute element={<HeartRateMonitor />} />} />
+                <Route path="/presion" element={<ProtectedRoute element={<PresionArterialView />} />} />
               </Routes>
             </main>
         </Router>
