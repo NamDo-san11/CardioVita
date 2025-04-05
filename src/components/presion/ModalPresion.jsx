@@ -58,8 +58,8 @@ const ModalPresion = ({ show, onHide, onGuardar }) => {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>Cancelar</Button>
-        <Button variant="primary" onClick={handleSubmit}>Agregar Datos</Button>
+        <Button variant="outline-danger" onClick={onHide}>Cancelar</Button>
+        <Button variant="outline-success" onClick={handleSubmit}>Agregar Datos</Button>
       </Modal.Footer>
     </Modal>
   );

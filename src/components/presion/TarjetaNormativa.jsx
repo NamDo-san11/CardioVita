@@ -1,33 +1,37 @@
 import { Card, ProgressBar } from "react-bootstrap";
 
-const TarjetaNormativa = ({ rango }) => {
-  const { sistolica, diastolica } = rango;
+const TarjetaNormativa = ({ ultima, resumen }) => {
+  if (!ultima || !resumen) return null;
 
-  const obtenerNivel = (valor, tipo) => {
-    if (tipo === "sistolica") {
-      if (valor < 120) return { texto: "Normal", color: "success" };
-      if (valor <= 129) return { texto: "Elevada", color: "warning" };
-      return { texto: "Alta", color: "danger" };
-    } else {
-      if (valor < 80) return { texto: "Normal", color: "success" };
-      if (valor <= 89) return { texto: "Elevada", color: "warning" };
-      return { texto: "Alta", color: "danger" };
+  const { sistolica, diastolica, rango } = ultima;
+
+  const obtenerColor = (estado) => {
+    switch (estado) {
+      case "Normal": return "success";
+      case "Elevada": return "warning";
+      case "Alta": return "danger";
+      default: return "secondary";
     }
   };
 
-  const nivelSistolica = obtenerNivel(sistolica, "sistolica");
-  const nivelDiastolica = obtenerNivel(diastolica, "diastolica");
+  const total = resumen.normal + resumen.elevada + resumen.alta;
+  const estadoFrecuente = Object.entries(resumen).reduce((a, b) => a[1] > b[1] ? a : b)[0];
+  const porcentaje = Math.round((resumen[estadoFrecuente] / total) * 100);
 
   return (
     <Card className="shadow-sm p-3">
-      <Card.Title className="text-uppercase text-muted">Comparar la normativa</Card.Title>
+      <Card.Title className="text-uppercase text-muted">Tu última lectura</Card.Title>
       <div className="mb-2">
-        <strong className={`text-${nivelSistolica.color}`}>{nivelSistolica.texto}</strong> (Sistólica)
-        <ProgressBar now={sistolica} label={`${sistolica} mmHg`} variant={nivelSistolica.color} />
+        <strong className={`text-${obtenerColor(rango)}`}>{rango}</strong> (Sistólica: {sistolica})
+        <ProgressBar now={sistolica} label={`${sistolica} mmHg`} variant={obtenerColor(rango)} />
       </div>
-      <div>
-        <strong className={`text-${nivelDiastolica.color}`}>{nivelDiastolica.texto}</strong> (Diastólica)
-        <ProgressBar now={diastolica} label={`${diastolica} mmHg`} variant={nivelDiastolica.color} />
+      <div className="mb-3">
+        <strong className={`text-${obtenerColor(rango)}`}>{rango}</strong> (Diastólica: {diastolica})
+        <ProgressBar now={diastolica} label={`${diastolica} mmHg`} variant={obtenerColor(rango)} />
+      </div>
+
+      <div className="mt-2">
+        <small className="text-muted">Frecuencia habitual: <strong className={`text-${obtenerColor(estadoFrecuente.charAt(0).toUpperCase() + estadoFrecuente.slice(1))}`}>{estadoFrecuente.charAt(0).toUpperCase() + estadoFrecuente.slice(1)}</strong> ({porcentaje}%)</small>
       </div>
     </Card>
   );

@@ -1,14 +1,45 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import TarjetaNormativa from "../components/presion/TarjetaNormativa";
 import TarjetaInformativa from "../components/presion/TarjetaInformativa";
 import ModalPresion from "../components/presion/ModalPresion";
+import ListadoPresiones from "../components/presion/ListadoPresiones";
 import { db, auth } from "../database/firebaseconfig";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, getDocs, addDoc, setDoc, doc, deleteDoc, serverTimestamp } from "firebase/firestore";
 import "../styles/PresionArterial.css";
 
 const PresionArterialView = () => {
   const [mostrarModal, setMostrarModal] = useState(false);
+  const [datosEditar, setDatosEditar] = useState(null);
+  const [ultimaPresion, setUltimaPresion] = useState(null);
+  const [resumenPresion, setResumenPresion] = useState(null);
+  const [registros, setRegistros] = useState([]);
+
+  const cargarDatos = async () => {
+    const user = auth.currentUser;
+    if (!user) return;
+    const snapshot = await getDocs(collection(db, "presion_arterial"));
+    const registrosFiltrados = snapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .filter(r => r.uid === user.uid)
+      .sort((a, b) => new Date(b.fecha + 'T' + b.hora) - new Date(a.fecha + 'T' + a.hora));
+
+    setRegistros(registrosFiltrados);
+
+    if (registrosFiltrados.length > 0) {
+      setUltimaPresion(registrosFiltrados[0]);
+      const resumen = { normal: 0, elevada: 0, alta: 0 };
+      registrosFiltrados.forEach(r => {
+        const rango = r.rango?.toLowerCase();
+        if (resumen[rango] !== undefined) resumen[rango]++;
+      });
+      setResumenPresion(resumen);
+    }
+  };
+
+  useEffect(() => {
+    cargarDatos();
+  }, []);
 
   const handleGuardarPresion = async (datos) => {
     const user = auth.currentUser;
@@ -24,37 +55,69 @@ const PresionArterialView = () => {
     };
 
     try {
-      await addDoc(collection(db, "presion_arterial"), data);
-      alert("Registro guardado exitosamente.");
+      if (datosEditar && datosEditar.id) {
+        await setDoc(doc(db, "presion_arterial", datosEditar.id), data);
+        alert("Registro actualizado exitosamente.");
+      } else {
+        await addDoc(collection(db, "presion_arterial"), data);
+        alert("Registro guardado exitosamente.");
+      }
+      setMostrarModal(false);
+      setDatosEditar(null);
+      cargarDatos();
     } catch (error) {
       console.error("Error al guardar la presión arterial:", error);
     }
   };
 
+  const handleEliminarPresion = async (id) => {
+    if (window.confirm("¿Eliminar este registro?")) {
+      await deleteDoc(doc(db, "presion_arterial", id));
+      cargarDatos();
+    }
+  };
+
   return (
     <Container className="presion-container mt-4">
-       <br />
-       <br />
+      <br />
+      <br />
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="fw-bold text-primary">Presión Arterial</h2>
-        <Button variant="primary" onClick={() => setMostrarModal(true)}>
+        <h2 className="fw-bold text-edit">Presión Arterial</h2>
+        <Button variant="success" onClick={() => {
+          setDatosEditar(null);
+          setMostrarModal(true);
+        }}>
           + Agregar
         </Button>
       </div>
 
       <Row>
         <Col md={12} className="mb-3">
-          <TarjetaNormativa rango={{ sistolica: 100, diastolica: 65 }} />
+          <TarjetaNormativa ultima={ultimaPresion} resumen={resumenPresion} />
+        </Col>
+        <Col md={12} className="mb-4">
+          <TarjetaInformativa />
         </Col>
         <Col md={12}>
-          <TarjetaInformativa />
+          <ListadoPresiones
+            registros={registros}
+            onEdit={(registro) => {
+              setDatosEditar(registro);
+              setMostrarModal(true);
+            }}
+            onDelete={handleEliminarPresion}
+          />
         </Col>
       </Row>
 
       <ModalPresion
         show={mostrarModal}
-        onHide={() => setMostrarModal(false)}
+        onHide={() => {
+          setMostrarModal(false);
+          setDatosEditar(null);
+        }}
         onGuardar={handleGuardarPresion}
+        datosIniciales={datosEditar}
       />
     </Container>
   );
