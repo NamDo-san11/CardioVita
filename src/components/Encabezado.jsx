@@ -92,6 +92,14 @@ const Encabezado = () => {
                     <strong>Precion Arterial</strong>
                 </Nav.Link>
 
+                <Nav.Link
+                    onClick={() => handleNavigate("/alertasmedicacion")}
+                    className={isCollapsed ? "color-texto-marca" : "text-white"}
+                >
+                    {isCollapsed ? <i className="bi bi-heart-pulse-fill me-2"></i> : null}
+                    <strong>Alertas de Medicación</strong>
+                </Nav.Link>
+
                 {isLoggedIn ? (
                     <>
                     <Nav.Link onClick={handleLogout} className={isCollapsed ? "text-black" : "text-white"}>

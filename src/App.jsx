@@ -7,6 +7,7 @@ import Inicio from "./views/Inicio";
 import SintomasView from "./views/SintomasView";
 import HeartRateMonitor from "./views/HeartRateMonitor";
 import PresionArterialView from "./views/PresionArterialView";
+import AlertasMedicacion from "./views/AlertasMedicacion";
 
 import './App.css'
 
@@ -23,6 +24,7 @@ function App() {
                 <Route path="/sintomas" element={<ProtectedRoute element={<SintomasView />} />} />
                 <Route path="/corazon" element={<ProtectedRoute element={<HeartRateMonitor />} />} />
                 <Route path="/presion" element={<ProtectedRoute element={<PresionArterialView />} />} />
+                <Route path="/alertasmedicacion" element={<ProtectedRoute element={<AlertasMedicacion />} />} />
               </Routes>
             </main>
         </Router>
