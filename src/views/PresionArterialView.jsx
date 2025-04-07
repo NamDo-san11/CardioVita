@@ -5,6 +5,7 @@ import TarjetaInformativa from "../components/presion/TarjetaInformativa";
 import ModalPresion from "../components/presion/ModalPresion";
 import ListadoPresiones from "../components/presion/ListadoPresiones";
 import { db, auth } from "../database/firebaseconfig";
+import  ReactGA  from "react-ga4";
 import { collection, getDocs, addDoc, setDoc, doc, deleteDoc, serverTimestamp } from "firebase/firestore";
 import "../styles/PresionArterial.css";
 
@@ -15,6 +16,16 @@ const PresionArterialView = () => {
   const [resumenPresion, setResumenPresion] = useState(null);
   const [registros, setRegistros] = useState([]);
 
+  useEffect(() => {
+    // ?Iniciar Analityc la app
+    ReactGA.initialize("G-ZPQ0YG91K6");
+  
+    ReactGA.send({
+      hitType: 'pageview',
+      page: window.location.pathname,
+      title: 'PresionArterialView.jsx'
+    })
+  }, []);
   const cargarDatos = async () => {
     const user = auth.currentUser;
     if (!user) return;

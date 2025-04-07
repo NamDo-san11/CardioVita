@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import LoginForm from "../components/LoginForm";
 import { appfirebase } from "../database/firebaseconfig";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useAuth } from "../database/authcontext";
+import  ReactGA  from "react-ga4";
 
 import "../App.css";
 
@@ -15,6 +16,17 @@ const Login = () => {
 
     const { user } = useAuth();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // ?Iniciar Analityc la app
+        ReactGA.initialize("G-ZPQ0YG91K6");
+      
+        ReactGA.send({
+          hitType: 'pageview',
+          page: window.location.pathname,
+          title: 'Login.jsx'
+        })
+      }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();

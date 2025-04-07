@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import  ReactGA  from "react-ga4";
 import { Container, Row, Col, Form, Button, Card, ListGroup } from "react-bootstrap";
 
 const AlertasMedicacion = () => {
@@ -6,6 +7,17 @@ const AlertasMedicacion = () => {
     const [nombreMed, setNombreMed] = useState("");
     const [horaMed, setHoraMed] = useState("");
     const [diasDuracion, setDiasDuracion] = useState(1);
+
+    useEffect(() => {
+        // ?Iniciar Analityc la app
+        ReactGA.initialize("G-ZPQ0YG91K6");
+      
+        ReactGA.send({
+          hitType: 'pageview',
+          page: window.location.pathname,
+          title: 'AlertasMedicacion.jsx'
+        })
+      }, []);
 
     useEffect(() => {
         const intervalo = setInterval(() => {

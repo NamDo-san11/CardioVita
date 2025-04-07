@@ -1,6 +1,3 @@
-// Componente de Medición de Frecuencia Cardíaca para CardioVita
-// Estilo moderno (CSS personalizado), con switch de flash y guardado automático en Firebase
-
 import React, { useEffect, useRef, useState } from "react";
 import { Line } from "react-chartjs-2";
 import {
@@ -13,6 +10,7 @@ import {
 import { db } from "../database/firebaseconfig";
 import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import  ReactGA  from "react-ga4";
 import "../styles/CardioVitaMedicion.css";
 
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale);
@@ -30,6 +28,17 @@ export default function HeartRateCardioVita() {
 
   const SAMPLE_DURATION = 150;
   const PEAK_THRESHOLD = 1;
+
+  useEffect(() => {
+    // ?Iniciar Analityc la app
+    ReactGA.initialize("G-ZPQ0YG91K6");
+  
+    ReactGA.send({
+      hitType: 'pageview',
+      page: window.location.pathname,
+      title: 'HearRateMonitor.jsx'
+    })
+  }, []);
 
   useEffect(() => {
     let stream;

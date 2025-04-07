@@ -8,10 +8,27 @@ import SintomasView from "./views/SintomasView";
 import HeartRateMonitor from "./views/HeartRateMonitor";
 import PresionArterialView from "./views/PresionArterialView";
 import AlertasMedicacion from "./views/AlertasMedicacion";
+import ReactGA from "react-ga4";
 
 import './App.css'
+import { useEffect } from "react";
+
+
+
 
 function App() {
+
+  useEffect(() => {
+    // ?Iniciar Analityc la app
+    ReactGA.initialize("G-ZPQ0YG91K6");
+  
+    ReactGA.send({
+      hitType: 'pageview',
+      page: window.location.pathname,
+      title: 'App.jsx'
+    })
+  }, []);
+  
   return (
     <>
       <AuthProvider>

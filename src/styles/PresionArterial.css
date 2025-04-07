@@ -1,15 +1,15 @@
-/* Estilo general para la vista */
+/* todo Estilo general para la vista */
 .presion-container {
     font-family: 'Segoe UI', sans-serif;
   }
   
-  /* Estilo para el header */
+  /* ?Estilo para el header */
   .presion-container h2 {
     font-size: 2rem;
     font-weight: 700;
   }
   
-  /* Tarjetas */
+  /* ?Tarjetas */
   .card {
     border-radius: 16px;
     transition: all 0.3s ease-in-out;
@@ -19,14 +19,14 @@
     transform: translateY(-3px);
   }
   
-  /* Etiquetas y badges */
+  /* ?Etiquetas y badges */
   .badge {
     font-size: 0.85rem;
     padding: 6px 10px;
     border-radius: 10px;
   }
   
-  /* Modal */
+  /* ! Modal */
   .modal-content {
     border-radius: 20px;
     padding: 10px;
@@ -40,7 +40,7 @@
     border-top: none;
   }
   
-  /* Botones */
+  /* ?Botones */
   button.btn-primary {
     font-weight: 500;
     border-radius: 12px;
