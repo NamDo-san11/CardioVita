@@ -35,52 +35,64 @@ import { db } from "../database/firebaseconfig";
         cargarMedicaciones();
     }, []);
 
-    // Alerta cada minuto
-    useEffect(() => {
-        const intervalo = setInterval(() => {
-        const ahora = new Date();
-        const horaActual = ahora.toTimeString().slice(0, 5);
-        const fechaHoy = ahora.toISOString().split("T")[0];
-
-        medicaciones.forEach((med) => {
-            if (
-            med.hora === horaActual &&
-            !med.tomado &&
-            fechaHoy >= med.fechaInicio &&
-            fechaHoy <= med.fechaFin
-            ) {
-            alert(`¡Es hora de tomar: ${med.nombre}!`);
-            }
-        });
-        }, 60000);
-
-        return () => clearInterval(intervalo);
-    }, [medicaciones]);
+        // Alerta cada minuto
+        useEffect(() => {
+            const intervalo = setInterval(() => {
+            const ahora = new Date();
+            const fechaHoy = ahora.toISOString().split("T")[0];
+        
+            medicaciones.forEach((med) => {
+                const [hora, minuto] = med.hora.split(":").map(Number);
+                const horaMed = new Date();
+                horaMed.setHours(hora, minuto, 0, 0);
+        
+                const diferencia = Math.abs(horaMed - ahora); // diferencia en ms
+        
+                if (
+                diferencia < 60000 && // menos de 1 minuto de diferencia
+                !med.tomado &&
+                fechaHoy >= med.fechaInicio &&
+                fechaHoy <= med.fechaFin
+                ) {
+                alert(`¡Es hora de tomar: ${med.nombre}!`);
+                }
+            });
+            }, 30000); // cada 30 segundos (más suave que cada 1s)
+        
+            return () => clearInterval(intervalo);
+        }, [medicaciones]);
 
     const agregarMedicacion = async () => {
         if (nombreMed && horaMed && diasDuracion > 0) {
-        const hoy = new Date();
-        const fechaInicio = hoy.toISOString().split("T")[0];
-        const fechaFin = new Date(hoy);
-        fechaFin.setDate(hoy.getDate() + parseInt(diasDuracion) - 1);
-
-        const nuevaMed = {
-            nombre: nombreMed,
-            hora: horaMed,
-            tomado: false,
-            pospuesto: false,
-            fechaInicio,
-            fechaFin: fechaFin.toISOString().split("T")[0],
-        };
-
-        const docRef = await addDoc(collection(db, "medicaciones"), nuevaMed);
-        setMedicaciones([...medicaciones, { ...nuevaMed, id: docRef.id }]);
-
-        setNombreMed("");
-        setHoraMed("");
-        setDiasDuracion(1);
+            const hoy = new Date();
+            const fechaInicio = hoy.getFullYear() + "-" + 
+                String(hoy.getMonth() + 1).padStart(2, "0") + "-" + 
+                String(hoy.getDate()).padStart(2, "0");
+    
+            const fechaFinDate = new Date(hoy);
+            fechaFinDate.setDate(hoy.getDate() + parseInt(diasDuracion) - 1);
+            const fechaFin = fechaFinDate.getFullYear() + "-" + 
+                String(fechaFinDate.getMonth() + 1).padStart(2, "0") + "-" + 
+                String(fechaFinDate.getDate()).padStart(2, "0");
+    
+            const nuevaMed = {
+                nombre: nombreMed,
+                hora: horaMed,
+                tomado: false,
+                pospuesto: false,
+                fechaInicio,
+                fechaFin,
+            };
+    
+            const docRef = await addDoc(collection(db, "medicaciones"), nuevaMed);
+            setMedicaciones([...medicaciones, { ...nuevaMed, id: docRef.id }]);
+    
+            setNombreMed("");
+            setHoraMed("");
+            setDiasDuracion(1);
         }
     };
+    
 
     const marcarComoTomada = async (index) => {
         const med = medicaciones[index];
