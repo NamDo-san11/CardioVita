@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Container, Row, Col, Card } from "react-bootstrap";
 import "aos/dist/aos.css";
 import "../styles/Inicio.css";
-import Imagen from "../assets/FrecuenciaCardiaca.jpg";
+import Imagen from "../assets/Frecuenciacardiaca.jpg";
 
 const Inicio = () => {
     const navigate = useNavigate();
