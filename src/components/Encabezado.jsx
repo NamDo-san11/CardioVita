@@ -89,14 +89,14 @@ const Encabezado = () => {
                     className={isCollapsed ? "color-texto-marca" : "text-white"}
                 >
                     {isCollapsed ? <i className="bi bi-heart-pulse-fill me-2"></i> : null}
-                    <strong>Precion Arterial</strong>
+                    <strong>Presión Arterial</strong>
                 </Nav.Link>
 
                 <Nav.Link
                     onClick={() => handleNavigate("/alertasmedicacion")}
                     className={isCollapsed ? "color-texto-marca" : "text-white"}
                 >
-                    {isCollapsed ? <i className="bi bi-heart-pulse-fill me-2"></i> : null}
+                    {isCollapsed ? <i className="bi bi-capsule me-2"></i> : null}
                     <strong>Alertas de Medicación</strong>
                 </Nav.Link>
 

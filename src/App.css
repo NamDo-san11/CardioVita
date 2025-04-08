@@ -6,3 +6,64 @@
 .color-texto-marca {
     color: #5B6F8F !important;
 }
+
+.tarjeta-info {
+    border: none;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    transition: transform 0.2s ease-in-out;
+    padding: 1rem;
+    height: 100%;
+  }
+  
+  .tarjeta-info:hover {
+    transform: translateY(-5px);
+  }
+  
+  .tarjeta-info .card-body {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #222;
+  }
+  
+
+  .tarjeta-sintoma {
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .tarjeta-sintoma .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .tarjeta-sintoma {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+  }
+  
+  .card-body {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .contenido-superior p {
+    margin-bottom: 0.4rem;
+  }
+  
+  .mt-auto {
+    margin-top: auto;
+  }
+  
+  .text-end {
+    text-align: right;
+  }
+  

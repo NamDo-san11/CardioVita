@@ -33,23 +33,28 @@ const HistorialSintomas = ({ onEdit }) => {
                     <p>No hay registros disponibles.</p>
                 ) : (
                     historial.map((item) => (
-                        <div key={item.id} className="col-md-4 mb-3">
-                            <div className="card">
-                                <div className="card-body">
-                                    <h5 className="card-title">Fecha: {item.fecha}</h5>
-                                    <p><strong>Estado de Ánimo:</strong> {item.estadoAnimo.join(", ")}</p>
-                                    <p><strong>Síntomas:</strong> {item.sintomas.join(", ")}</p>
-                                    <p><strong>Actividad Física:</strong> {item.actividadFisica.join(", ")}</p>
-                                    {item.otraAnomalia && <p><strong>Otra Anomalía:</strong> {item.otraAnomalia}</p>}
-                                    <button className="btn btn-warning me-2" onClick={() => onEdit(item)}>
-                                        Editar
-                                    </button>
-                                    <button className="btn btn-danger" onClick={() => handleDelete(item.id)}>
-                                        Eliminar
-                                    </button>
-                                </div>
+                        <div key={item.id} className="col-md-4 mb-4 d-flex">
+                        <div className="card w-100 tarjeta-sintoma">
+                          <div className="card-body d-flex flex-column">
+                            <div className="contenido-superior mb-3">
+                              <h5 className="card-title">Fecha: {item.fecha}</h5>
+                              <p><strong>Estado de Ánimo:</strong> {item.estadoAnimo.join(", ")}</p>
+                              <p><strong>Síntomas:</strong> {item.sintomas.join(", ")}</p>
+                              <p><strong>Actividad Física:</strong> {item.actividadFisica.join(", ")}</p>
+                              {item.otraAnomalia && <p><strong>Otra Anomalía:</strong> {item.otraAnomalia}</p>}
                             </div>
+                            <div className="mt-auto text-end">
+                              <button className="btn btn-warning me-2" onClick={() => onEdit(item)}>
+                                Editar
+                              </button>
+                              <button className="btn btn-danger" onClick={() => handleDelete(item.id)}>
+                                Eliminar
+                              </button>
+                            </div>
+                          </div>
                         </div>
+                      </div>
+                      
                     ))
                 )}
             </div>

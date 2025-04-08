@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Container, Row, Col, Card } from "react-bootstrap";
 import "aos/dist/aos.css";
 import "../styles/Inicio.css";
-import Imagen from "../assets/brayan.jpg";
+import Imagen from "../assets/FrecuenciaCardiaca.jpg";
 
 const Inicio = () => {
     const navigate = useNavigate();
@@ -29,9 +29,21 @@ const Inicio = () => {
             <Container>
             <h2 className="text-center">¿Por qué usar CardioVita?</h2>
             <Row className="mt-4 text-center">
-                <Col md={4}><Card body>✔ Registro diario de síntomas</Card></Col>
-                <Col md={4}><Card body>📈 Seguimiento del estado de ánimo</Card></Col>
-                <Col md={4}><Card body>🔒 Datos seguros y privados</Card></Col>
+            <Col md={4}>
+                <Card className="tarjeta-info">
+                <Card.Body>✔ Registro diario de síntomas</Card.Body>
+                </Card>
+            </Col>
+            <Col md={4}>
+                <Card className="tarjeta-info">
+                <Card.Body>📈 Seguimiento del estado de ánimo</Card.Body>
+                </Card>
+            </Col>
+            <Col md={4}>
+                <Card className="tarjeta-info">
+                <Card.Body>🔒 Datos seguros y privados</Card.Body>
+                </Card>
+            </Col>
             </Row>
             </Container>
         </section>
@@ -57,7 +69,7 @@ const Inicio = () => {
                 <Col md={6}>
                 <img
                     src={Imagen}
-                    width="400" height="400"
+                    width="500" height="500"
                     alt="App CardioVita"
                     className="border d-inline-block align-top img-fluid rounded inicio-imagen"
                 />
