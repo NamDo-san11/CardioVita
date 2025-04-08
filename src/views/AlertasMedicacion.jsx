@@ -3,12 +3,20 @@ import ReactGA from "react-ga4";
 import { Container, Row, Col, Form, Button, Card, ListGroup, } from "react-bootstrap";
 import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, } from "firebase/firestore";
 import { db } from "../database/firebaseconfig";
+import { getAuth } from "firebase/auth";
+
 
     const AlertasMedicacion = () => {
     const [medicaciones, setMedicaciones] = useState([]);
     const [nombreMed, setNombreMed] = useState("");
     const [horaMed, setHoraMed] = useState("");
     const [diasDuracion, setDiasDuracion] = useState(1);
+    
+
+    const auth = getAuth();
+    const usuarioActual = auth.currentUser;
+    const uid = usuarioActual?.uid;
+
 
         useEffect(() => {
             // ?Iniciar Analityc la app
@@ -22,18 +30,23 @@ import { db } from "../database/firebaseconfig";
         }, []);
 
     // Cargar medicaciones desde Firestore al iniciar
-    useEffect(() => {
-        const cargarMedicaciones = async () => {
-        const querySnapshot = await getDocs(collection(db, "medicaciones"));
-        const datos = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-        }));
-        setMedicaciones(datos);
-        };
-
-        cargarMedicaciones();
-    }, []);
+        useEffect(() => {
+            const cargarMedicaciones = async () => {
+            const querySnapshot = await getDocs(collection(db, "medicaciones"));
+            const datos = querySnapshot.docs
+                .map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+                }))
+                .filter((doc) => doc.uid === uid); // <- Filtrar por el UID actual
+        
+            setMedicaciones(datos);
+            };
+        
+            if (uid) {
+            cargarMedicaciones();
+            }
+        }, [uid]);
 
         // Alerta cada minuto
         useEffect(() => {
@@ -76,6 +89,7 @@ import { db } from "../database/firebaseconfig";
                 String(fechaFinDate.getDate()).padStart(2, "0");
     
             const nuevaMed = {
+                uid: uid,
                 nombre: nombreMed,
                 hora: horaMed,
                 tomado: false,
