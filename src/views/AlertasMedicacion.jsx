@@ -10,6 +10,7 @@ import { useAuth } from "../database/authcontext";
     import ModalRegistroMedicacion from "../components/medicaciones/ModalRegistroMedicacion";
     import ModalEdicionMedicacion from "../components/medicaciones/ModalEdicionMedicacion";
     import ModalEliminacionMedicacion from "../components/medicaciones/ModalEliminacionMedicacion";
+    import CuadroBusquedas from "../components/busquedas/CuadroBusquedas";
 
     const AlertasMedicacion = () => {
         const { user } = useAuth(); // ⬅️ Obtenés el usuario desde el contexto
@@ -23,6 +24,7 @@ import { useAuth } from "../database/authcontext";
     const [medicacionAEliminar, setMedicacionAEliminar] = useState(null);
     const [searchText, setSearchText] = useState("");
 
+
     // Inicializar Google Analytics
     useEffect(() => {
         ReactGA.initialize("G-ZPQ0YG91K6");
@@ -32,6 +34,20 @@ import { useAuth } from "../database/authcontext";
         title: "AlertasMedicacion.jsx",
         });
     }, []);
+
+    const handleSearchChange = (e) => {
+        const text = e.target.value.toLowerCase();
+        setSearchText(text);
+    };
+
+    const medicacionesFiltradas = medicaciones.filter((med) => {
+        return (
+            (med.nombre && med.nombre.toLowerCase().includes(searchText)) ||
+            (med.descripcion && med.descripcion.toLowerCase().includes(searchText))
+        );
+    });
+    
+    
 
     // Función para cargar las medicaciones del usuario
     const cargarMedicaciones = async () => {
@@ -102,39 +118,34 @@ import { useAuth } from "../database/authcontext";
         } catch (error) {
         console.error("Error al eliminar medicación:", error);
         }
-    };
-
-    const medicacionesFiltradas = medicaciones.filter((m) =>
-        m.nombre?.toLowerCase().includes(searchText.toLowerCase())
-    );
+    };  
 
     return (
         <Container style={{ marginTop: "100px" }}>
         <h4>💊 Alertas de Medicación</h4>
 
+        <CuadroBusquedas
+            searhText={searchText} 
+            handleSearchChange={handleSearchChange}
+        />
+
+
         <Button className="mb-3" onClick={() => setShowModal(true)}>
             Agregar medicación
         </Button>
 
-        <Form.Control
-            type="text"
-            placeholder="Buscar por nombre..."
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            className="mb-3"
-        />
-
         <TablaMedicaciones
             medicaciones={medicacionesFiltradas}
             openEditModal={(med) => {
-            setMedicacionEditada(med);
-            setShowEditModal(true);
+                setMedicacionEditada(med);
+                setShowEditModal(true);
             }}
             openDeleteModal={(med) => {
-            setMedicacionAEliminar(med);
-            setShowDeleteModal(true);
+                setMedicacionAEliminar(med);
+                setShowDeleteModal(true);
             }}
         />
+
 
         <ModalRegistroMedicacion
         show={showModal}
