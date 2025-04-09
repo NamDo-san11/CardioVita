@@ -11,6 +11,7 @@ import { useAuth } from "../database/authcontext";
     import ModalEdicionMedicacion from "../components/medicaciones/ModalEdicionMedicacion";
     import ModalEliminacionMedicacion from "../components/medicaciones/ModalEliminacionMedicacion";
     import CuadroBusquedas from "../components/busquedas/CuadroBusquedas";
+    import Paginacion from "../components/ordenamiento/Paginacion";
 
     const AlertasMedicacion = () => {
         const { user } = useAuth(); // ⬅️ Obtenés el usuario desde el contexto
@@ -23,6 +24,8 @@ import { useAuth } from "../database/authcontext";
     const [medicacionEditada, setMedicacionEditada] = useState(null);
     const [medicacionAEliminar, setMedicacionAEliminar] = useState(null);
     const [searchText, setSearchText] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
 
 
     // Inicializar Google Analytics
@@ -35,9 +38,11 @@ import { useAuth } from "../database/authcontext";
         });
     }, []);
 
+    // Función de búsqueda
     const handleSearchChange = (e) => {
         const text = e.target.value.toLowerCase();
         setSearchText(text);
+        setCurrentPage(1);
     };
 
     const medicacionesFiltradas = medicaciones.filter((med) => {
@@ -46,6 +51,11 @@ import { useAuth } from "../database/authcontext";
             (med.descripcion && med.descripcion.toLowerCase().includes(searchText))
         );
     });
+    
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const medicacionesPaginadas = medicacionesFiltradas.slice(indexOfFirstItem, indexOfLastItem);
+    
     
     
 
@@ -129,13 +139,12 @@ import { useAuth } from "../database/authcontext";
             handleSearchChange={handleSearchChange}
         />
 
-
         <Button className="mb-3" onClick={() => setShowModal(true)}>
             Agregar medicación
         </Button>
 
         <TablaMedicaciones
-            medicaciones={medicacionesFiltradas}
+            medicaciones={medicacionesPaginadas}
             openEditModal={(med) => {
                 setMedicacionEditada(med);
                 setShowEditModal(true);
@@ -144,6 +153,13 @@ import { useAuth } from "../database/authcontext";
                 setMedicacionAEliminar(med);
                 setShowDeleteModal(true);
             }}
+        />
+
+        <Paginacion
+            itemsPerPage={itemsPerPage}
+            totalItems={medicacionesFiltradas.length}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
         />
 
 
