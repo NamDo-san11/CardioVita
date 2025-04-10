@@ -11,16 +11,28 @@ const AlertasAutomaticas = ({ medicaciones }) => {
         const intervalo = setInterval(() => {
             const ahora = new Date();
             const fechaHoy = ahora.toISOString().split("T")[0];
-
+    
             medicaciones.forEach((med) => {
-                const [hora, minuto] = med.hora.split(":").map(Number);
+                if (!med.hora) return;
+    
+                // Extraer hora, minuto y AM/PM
+                const [horaMinuto, ampm] = med.hora.split(" ");
+                const [horaStr, minutoStr] = horaMinuto.split(":");
+                let hora = parseInt(horaStr, 10);
+                const minuto = parseInt(minutoStr, 10);
+    
+                // Convertir a formato 24h
+                if (ampm === "PM" && hora < 12) hora += 12;
+                if (ampm === "AM" && hora === 12) hora = 0;
+    
                 const horaMed = new Date();
                 horaMed.setHours(hora, minuto, 0, 0);
-
-                const diferencia = Math.abs(horaMed - ahora);
-
+    
+                const ahoraRedondeado = new Date();
+                ahoraRedondeado.setSeconds(0, 0); // Ignoramos los segundos y milisegundos
+    
                 if (
-                    diferencia < 60000 &&
+                    horaMed.getTime() === ahoraRedondeado.getTime() &&
                     !med.tomado &&
                     fechaHoy >= med.fechaInicio &&
                     fechaHoy <= med.fechaFin
@@ -29,10 +41,12 @@ const AlertasAutomaticas = ({ medicaciones }) => {
                     setShow(true);
                 }
             });
-        }, 30000);
-
+        }, 1000); // Verificamos cada segundo para mayor precisión
+    
         return () => clearInterval(intervalo);
     }, [medicaciones]);
+    
+    
 
     const handleClose = () => setShow(false);
 

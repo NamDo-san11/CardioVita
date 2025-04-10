@@ -81,18 +81,74 @@ const ModalRegistroMedicacion = ({ show, onHide, onMedicacionAgregada }) => {
                         </Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Hora de Toma</Form.Label>
-                        <Form.Control
-                            type="time"
-                            value={hora}
-                            onChange={(e) => setHora(e.target.value)}
+                    <Form.Label>Hora de Toma</Form.Label>
+                        <div className="d-flex gap-2 align-items-center">
+                            {/* Hora (1-12) */}
+                            <Form.Control
+                            type="number"
+                            min="1"
+                            max="12"
+                            value={hora.split(":")[0] || ""}
+                            onChange={(e) => {
+                                const valor = e.target.value;
+                                let h = valor === "" ? "" : parseInt(valor);
+                                if (h !== "") {
+                                    if (isNaN(h) || h < 1) h = 1;
+                                    if (h > 12) h = 12;
+                                    h = String(h).padStart(2, "0");
+                                }
+                                const m = hora.split(":")[1]?.split(" ")[0] || "00";
+                                const periodo = hora.split(" ")[1] || "AM";
+                                setHora(`${h}:${m} ${periodo}`);
+                            }}
+                            placeholder="HH"
                             isInvalid={!!errores.hora}
+                            style={{ width: "80px" }}
                         />
+
+                            :
+
+                            {/* Minutos (0-59) */}
+                            <Form.Control
+                            type="number"
+                            min="0"
+                            max="59"
+                            value={hora.split(":")[1]?.split(" ")[0] || ""}
+                            onChange={(e) => {
+                                const valor = e.target.value;
+                                let m = valor === "" ? "" : parseInt(valor);
+                                if (m !== "") {
+                                    if (isNaN(m) || m < 0) m = 0;
+                                    if (m > 59) m = 59;
+                                    m = String(m).padStart(2, "0");
+                                }
+                                const h = hora.split(":")[0] || "01";
+                                const periodo = hora.split(" ")[1] || "AM";
+                                setHora(`${String(h).padStart(2, "0")}:${m} ${periodo}`);
+                            }}
+                            placeholder="MM"
+                            isInvalid={!!errores.hora}
+                            style={{ width: "80px" }}
+                        />
+
+
+                            {/* Selector AM/PM */}
+                            <Form.Select
+                                value={hora.split(" ")[1] || "AM"}
+                                onChange={(e) => {
+                                    const h = hora.split(":")[0] || "01";
+                                    const m = hora.split(":")[1]?.split(" ")[0] || "00";
+                                    setHora(`${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")} ${e.target.value}`);
+                                }}
+                                style={{ width: "90px" }}
+                            >
+                                <option value="AM">AM</option>
+                                <option value="PM">PM</option>
+                            </Form.Select>
+                        </div>
                         <Form.Control.Feedback type="invalid">
                             {errores.hora}
                         </Form.Control.Feedback>
-                    </Form.Group>
 
                     <Form.Group className="mb-3">
                         <Form.Label>Días de duración</Form.Label>

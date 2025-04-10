@@ -1,14 +1,6 @@
 import React from "react";
 import { Table, Button } from "react-bootstrap";
 
-// Función para formatear la hora a 12h
-const formatearHora12 = (hora24) => {
-    const [hora, minuto] = hora24.split(":").map(Number);
-    const ampm = hora >= 12 ? "PM" : "AM";
-    const hora12 = hora % 12 || 12;
-    return `${hora12}:${minuto.toString().padStart(2, "0")} ${ampm}`;
-};
-
 const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => {
     return (
     <Table striped bordered hover responsive>
@@ -34,7 +26,7 @@ const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => 
                 medicaciones.map((med) => (
                     <tr key={med.id}>
                         <td>{med.nombre}</td>
-                        <td>{formatearHora12(med.hora)}</td>
+                        <td>{med.hora}</td>
                         <td>{med.tomado ? "Sí" : "No"}</td>
                         <td>{med.pospuesto ? "Sí" : "No"}</td>
                         <td>{med.fechaInicio}</td>
