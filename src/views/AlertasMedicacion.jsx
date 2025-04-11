@@ -5,6 +5,7 @@ import { collection, doc, updateDoc, deleteDoc, onSnapshot, query, where, } from
 import ReactGA from "react-ga4";
 import { useAuth } from "../database/authcontext";
 import { Row, Col } from "react-bootstrap";
+import { FaPills, FaPlus } from "react-icons/fa";
 
     import TablaMedicaciones from "../components/medicaciones/TablaMedicaciones";
     import ModalRegistroMedicacion from "../components/medicaciones/ModalRegistroMedicacion";
@@ -99,12 +100,15 @@ import { Row, Col } from "react-bootstrap";
         
             <Row className="align-items-center mb-3">
                 <Col xs={12} md={4} className="mb-2">
-                    <Button
-                    onClick={() => setShowModal(true)}
-                    style={{ width: "100%" }}
-                    >
-                    Agregar medicación
-                    </Button>
+                <Button
+                onClick={() => setShowModal(true)}
+                style={{ width: "100%" }}
+                title="Agregar medicación"
+                >
+                <FaPills className="me-1" />
+                <FaPlus />
+                </Button>
+
                 </Col>
                 <Col xs={12} md={8}>
                 <CuadroBusquedas

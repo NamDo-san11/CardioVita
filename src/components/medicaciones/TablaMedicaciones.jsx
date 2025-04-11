@@ -1,5 +1,6 @@
 import { Table, Button } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => {
     const [fontSize, setFontSize] = useState("0.85rem");
@@ -56,18 +57,21 @@ const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => 
                     <td>{med.fechaFin}</td>
                     <td>
                     <div className="d-flex flex-wrap gap-2">
-                        <button
-                        className="btn btn-warning btn-sm"
-                        onClick={() => openEditModal(med)}
-                        >
-                        Editar
-                        </button>
-                        <button
-                        className="btn btn-danger btn-sm"
-                        onClick={() => openDeleteModal(med)}
-                        >
-                        Eliminar
-                        </button>
+                    <button
+                    className="btn btn-warning btn-sm"
+                    onClick={() => openEditModal(med)}
+                    title="Editar"
+                    >
+                    <FaEdit />
+                    </button>
+                    <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => openDeleteModal(med)}
+                    title="Eliminar"
+                    >
+                    <FaTrash />
+                    </button>
+
                     </div>
                     </td>
                 </tr>
