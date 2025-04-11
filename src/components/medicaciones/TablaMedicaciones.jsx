@@ -3,7 +3,9 @@ import { Table, Button } from "react-bootstrap";
 
 const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => {
     return (
-    <Table striped bordered hover responsive>
+        <div style={{ overflowX: "auto", maxWidth: "100%", fontSize: "0.85rem" }}>
+
+        <Table striped bordered hover responsive size="sm" className="mb-0">
         <thead>
             <tr>
                 <th>Nombre</th>
@@ -32,11 +34,11 @@ const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => 
                         <td>{med.fechaInicio}</td>
                         <td>{med.fechaFin}</td>
                         <td>
+                        <div className="d-flex flex-wrap gap-2">
                             <Button
                                 variant="warning"
                                 size="sm"
                                 onClick={() => openEditModal(med)}
-                                className="me-2"
                             >
                                 Editar
                             </Button>
@@ -47,12 +49,15 @@ const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => 
                             >
                                 Eliminar
                             </Button>
+                            </div>
+
                         </td>
                     </tr>
                 ))
             )}
         </tbody>
     </Table>
+    </div>
     );
 };
 

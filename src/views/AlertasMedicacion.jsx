@@ -4,6 +4,7 @@ import { db } from "../database/firebaseconfig";
 import { collection, doc, updateDoc, deleteDoc, onSnapshot, query, where, } from "firebase/firestore";
 import ReactGA from "react-ga4";
 import { useAuth } from "../database/authcontext";
+import { Row, Col } from "react-bootstrap";
 
     import TablaMedicaciones from "../components/medicaciones/TablaMedicaciones";
     import ModalRegistroMedicacion from "../components/medicaciones/ModalRegistroMedicacion";
@@ -93,60 +94,72 @@ import { useAuth } from "../database/authcontext";
     };
 
     return (
-        <Container style={{ marginTop: "100px" }}>
-        <h4>💊 Alertas de Medicación</h4>
+            <Container style={{ marginTop: "100px" }}>
+            <h4>💊 Alertas de Medicación</h4>
+        
+            <Row className="align-items-center mb-3">
+                <Col xs={12} md={4} className="mb-2">
+                    <Button
+                    onClick={() => setShowModal(true)}
+                    style={{ width: "100%" }}
+                    >
+                    Agregar medicación
+                    </Button>
+                </Col>
+                <Col xs={12} md={8}>
+                <CuadroBusquedas
+                    searchText={searchText}
+                    handleSearchChange={handleSearchChange}
+                    style={{ width: "100%" }}
+                />
+                </Col>
 
-        <CuadroBusquedas
-            searhText={searchText}
-            handleSearchChange={handleSearchChange}
-        />
+            </Row>
 
-        <Button className="mb-3" onClick={() => setShowModal(true)}>
-            Agregar medicación
-        </Button>
-
-        <TablaMedicaciones
+        
+            <TablaMedicaciones
             medicaciones={medicacionesPaginadas}
             openEditModal={(med) => {
-            setMedicacionEditada(med);
-            setShowEditModal(true);
+                setMedicacionEditada(med);
+                setShowEditModal(true);
             }}
             openDeleteModal={(med) => {
-            setMedicacionAEliminar(med);
-            setShowDeleteModal(true);
+                setMedicacionAEliminar(med);
+                setShowDeleteModal(true);
             }}
-        />
+            />
 
-        <Paginacion
-            itemsPerPage={itemsPerPage}
-            totalItems={medicacionesFiltradas.length}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-        />
-
-        <ModalRegistroMedicacion
-        show={showModal}
-        onHide={() => setShowModal(false)}
-        onMedicacionAgregada={() => setShowModal(false)}
-        />
-
-        <ModalEdicionMedicacion
-            show={showEditModal}
-            onHide={() => setShowEditModal(false)}
-            datos={medicacionEditada}
-            onGuardar={editarMedicacion}
-        />
-
-        <ModalEliminacionMedicacion
-            show={showDeleteModal}
-            onHide={() => setShowDeleteModal(false)}
-            datos={medicacionAEliminar}
-            onEliminar={eliminarMedicacion}
-        />
-
-        <AlertasAutomaticas medicaciones={medicaciones} />
-        </Container>
-    );
+        
+            <Paginacion
+                itemsPerPage={itemsPerPage}
+                totalItems={medicacionesFiltradas.length}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+            />
+        
+            <ModalRegistroMedicacion
+                show={showModal}
+                onHide={() => setShowModal(false)}
+                onMedicacionAgregada={() => setShowModal(false)}
+            />
+        
+            <ModalEdicionMedicacion
+                show={showEditModal}
+                onHide={() => setShowEditModal(false)}
+                datos={medicacionEditada}
+                onGuardar={editarMedicacion}
+            />
+        
+            <ModalEliminacionMedicacion
+                show={showDeleteModal}
+                onHide={() => setShowDeleteModal(false)}
+                datos={medicacionAEliminar}
+                onEliminar={eliminarMedicacion}
+            />
+        
+            <AlertasAutomaticas medicaciones={medicaciones} />
+            </Container>
+        );      
 };
 
 export default AlertasMedicacion;

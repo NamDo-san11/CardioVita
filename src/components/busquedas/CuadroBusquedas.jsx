@@ -4,7 +4,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 
 const CuadroBusquedas = ({searhText, handleSearchChange}) => {
     return (
-        <InputGroup className="mb-3" style={{ width: "400px"}}>
+        <InputGroup className="mb-3" style={{ width: "335px"}}>
             <InputGroup.Text>
                 <i className="bi bi-search"></i>
             </InputGroup.Text>
