@@ -1,12 +1,33 @@
-import React from "react";
 import { Table, Button } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
 
 const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => {
-    return (
-        <div style={{ overflowX: "auto", maxWidth: "100%", fontSize: "0.85rem" }}>
+    const [fontSize, setFontSize] = useState("0.85rem");
 
-        <Table striped bordered hover responsive size="sm" className="mb-0">
-        <thead>
+    useEffect(() => {
+        const updateFontSize = () => {
+        const width = window.innerWidth;
+        if (width >= 992) {
+            // Laptops y pantallas grandes
+            setFontSize("1rem");
+        } else if (width >= 768) {
+            // Tablets o pantallas medianas
+            setFontSize("0.9rem");
+        } else {
+            // Móviles
+            setFontSize("0.75rem");
+        }
+        };
+
+        updateFontSize(); // al cargar
+        window.addEventListener("resize", updateFontSize);
+        return () => window.removeEventListener("resize", updateFontSize);
+    }, []);
+
+    return (
+        <div style={{ overflowX: "auto", maxWidth: "100%", fontSize }}>
+        <table className="table table-striped table-bordered table-hover table-sm mb-0">
+            <thead>
             <tr>
                 <th>Nombre</th>
                 <th>Hora</th>
@@ -16,48 +37,45 @@ const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => 
                 <th>Fin</th>
                 <th>Acciones</th>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             {medicaciones.length === 0 ? (
                 <tr>
-                    <td colSpan="7" className="text-center">
-                        No hay medicaciones registradas.
-                    </td>
+                <td colSpan="7" className="text-center">
+                    No hay medicaciones registradas.
+                </td>
                 </tr>
             ) : (
                 medicaciones.map((med) => (
-                    <tr key={med.id}>
-                        <td>{med.nombre}</td>
-                        <td>{med.hora}</td>
-                        <td>{med.tomado ? "Sí" : "No"}</td>
-                        <td>{med.pospuesto ? "Sí" : "No"}</td>
-                        <td>{med.fechaInicio}</td>
-                        <td>{med.fechaFin}</td>
-                        <td>
-                        <div className="d-flex flex-wrap gap-2">
-                            <Button
-                                variant="warning"
-                                size="sm"
-                                onClick={() => openEditModal(med)}
-                            >
-                                Editar
-                            </Button>
-                            <Button
-                                variant="danger"
-                                size="sm"
-                                onClick={() => openDeleteModal(med)}
-                            >
-                                Eliminar
-                            </Button>
-                            </div>
-
-                        </td>
-                    </tr>
+                <tr key={med.id}>
+                    <td>{med.nombre}</td>
+                    <td>{med.hora}</td>
+                    <td>{med.tomado ? "Sí" : "No"}</td>
+                    <td>{med.pospuesto ? "Sí" : "No"}</td>
+                    <td>{med.fechaInicio}</td>
+                    <td>{med.fechaFin}</td>
+                    <td>
+                    <div className="d-flex flex-wrap gap-2">
+                        <button
+                        className="btn btn-warning btn-sm"
+                        onClick={() => openEditModal(med)}
+                        >
+                        Editar
+                        </button>
+                        <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => openDeleteModal(med)}
+                        >
+                        Eliminar
+                        </button>
+                    </div>
+                    </td>
+                </tr>
                 ))
             )}
-        </tbody>
-    </Table>
-    </div>
+            </tbody>
+        </table>
+        </div>
     );
 };
 

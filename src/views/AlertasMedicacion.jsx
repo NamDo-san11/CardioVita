@@ -116,7 +116,6 @@ import { Row, Col } from "react-bootstrap";
 
             </Row>
 
-        
             <TablaMedicaciones
             medicaciones={medicacionesPaginadas}
             openEditModal={(med) => {
