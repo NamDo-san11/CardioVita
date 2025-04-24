@@ -25,6 +25,24 @@ export default function HeartRateCardioVita() {
   const [error, setError] = useState(null);
   const [saved, setSaved] = useState(false);
   const [useTorch, setUseTorch] = useState(true);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+
+  //  ? Persitencia de datos notificacion
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOffline(false);
+    };
+    const handleOffline = () => {
+      setIsOffline(true);
+    };
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+    setIsOffline(!navigator.onLine);
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
 
   const SAMPLE_DURATION = 150;
   const PEAK_THRESHOLD = 1;

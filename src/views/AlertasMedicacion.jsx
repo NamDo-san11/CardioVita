@@ -28,6 +28,24 @@ import { FaPills, FaPlus } from "react-icons/fa";
     const [searchText, setSearchText] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
+    const [isOffline, setIsOffline] = useState(!navigator.onLine);
+
+    //  ? Persitencia de datos notificacion
+    useEffect(() => {
+      const handleOnline = () => {
+        setIsOffline(false);
+      };
+      const handleOffline = () => {
+        setIsOffline(true);
+      };
+      window.addEventListener("online", handleOnline);
+      window.addEventListener("offline", handleOffline);
+      setIsOffline(!navigator.onLine);
+      return () => {
+        window.removeEventListener("online", handleOnline);
+        window.removeEventListener("offline", handleOffline);
+      };
+    }, []);
 
     useEffect(() => {
         // ?Iniciar Analityc la app

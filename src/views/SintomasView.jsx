@@ -9,6 +9,24 @@ import "../styles/SintomasView.css"
 const SintomasView = () => {
   const [editarDatos, setEditarDatos] = useState(null);
   const [mostrarCuestionario, setMostrarCuestionario] = useState(false);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+
+  //  ? Persitencia de datos notificacion
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOffline(false);
+    };
+    const handleOffline = () => {
+      setIsOffline(true);
+    };
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+    setIsOffline(!navigator.onLine);
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
   
   useEffect(() => {
     // ?Iniciar Analityc la app

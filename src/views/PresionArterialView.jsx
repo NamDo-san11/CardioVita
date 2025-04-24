@@ -15,7 +15,25 @@ const PresionArterialView = () => {
   const [ultimaPresion, setUltimaPresion] = useState(null);
   const [resumenPresion, setResumenPresion] = useState(null);
   const [registros, setRegistros] = useState([]);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
 
+  //  ? Persitencia de datos notificacion
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOffline(false);
+    };
+    const handleOffline = () => {
+      setIsOffline(true);
+    };
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+    setIsOffline(!navigator.onLine);
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+  
   useEffect(() => {
     // ?Iniciar Analityc la app
     ReactGA.initialize("G-ZPQ0YG91K6");
