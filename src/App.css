@@ -66,3 +66,78 @@
   .text-end {
     text-align: right;
   }   
+
+  .hover-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .hover-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .hover-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+  }
+  
+  .hover-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  body {
+    background-color: #f8f9fa;
+  }
+  
+  /* App.css */
+
+.color-navbar {
+  background-color: #004080;
+}
+
+.color-texto-marca {
+  color: #004080;
+}
+
+.modal-content {
+  border-radius: 15px;
+}
+
+.card {
+  transition: transform 0.2s ease-in-out;
+}
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+.card-title {
+  font-weight: bold;
+}
+
+.card-text {
+  font-size: 0.9rem;
+}
+
+.btn-sm {
+  font-size: 0.8rem;
+  padding: 0.4rem 0.6rem;
+}
+
+.badge {
+  font-size: 1rem;
+}
+
+.video-container {
+  position: relative;
+  width: 360px;
+  height: 215px;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.ratio iframe {
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
