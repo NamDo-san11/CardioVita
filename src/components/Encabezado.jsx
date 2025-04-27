@@ -100,6 +100,14 @@ const Encabezado = () => {
                     <strong>Alertas de Medicación</strong>
                 </Nav.Link>
 
+                <Nav.Link
+                     onClick={() => handleNavigate("/educacion")}
+                    className={isCollapsed ? "color-texto-marca" : "text-white"}
+                            >
+                    {isCollapsed ? <i className="bi bi-journal-text me-2"></i> : null}
+                    <strong>Educación</strong>
+                </Nav.Link>
+
                 {isLoggedIn ? (
                     <>
                     <Nav.Link onClick={handleLogout} className={isCollapsed ? "text-black" : "text-white"}>
