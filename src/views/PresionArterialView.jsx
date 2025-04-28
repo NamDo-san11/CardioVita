@@ -5,7 +5,7 @@ import TarjetaInformativa from "../components/presion/TarjetaInformativa";
 import ModalPresion from "../components/presion/ModalPresion";
 import ListadoPresiones from "../components/presion/ListadoPresiones";
 import { db, auth } from "../database/firebaseconfig";
-import  ReactGA  from "react-ga4";
+import ReactGA from "react-ga4";
 import { collection, getDocs, addDoc, setDoc, doc, deleteDoc, serverTimestamp } from "firebase/firestore";
 import "../styles/PresionArterial.css";
 
@@ -16,42 +16,45 @@ const PresionArterialView = () => {
   const [resumenPresion, setResumenPresion] = useState(null);
   const [registros, setRegistros] = useState([]);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  const [filtro, setFiltro] = useState("todo");
 
-  //  ? Persitencia de datos notificacion
+  // Detectar online/offline
   useEffect(() => {
-    const handleOnline = () => {
-      setIsOffline(false);
-    };
-    const handleOffline = () => {
-      setIsOffline(true);
-    };
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
-    setIsOffline(!navigator.onLine);
+
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
   }, []);
-  
+
+  // Google Analytics
   useEffect(() => {
-    // ?Iniciar Analityc la app
     ReactGA.initialize("G-ZPQ0YG91K6");
-  
     ReactGA.send({
-      hitType: 'pageview',
+      hitType: "pageview",
       page: window.location.pathname,
-      title: 'PresionArterialView.jsx'
-    })
+      title: "PresionArterialView.jsx",
+    });
   }, []);
+
   const cargarDatos = async () => {
     const user = auth.currentUser;
     if (!user) return;
+
     const snapshot = await getDocs(collection(db, "presion_arterial"));
     const registrosFiltrados = snapshot.docs
-      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .map(doc => {
+        const data = { id: doc.id, ...doc.data() };
+        const fechaHora = new Date(`${data.fecha}T${data.hora.length === 5 ? data.hora + ":00" : data.hora}`);
+        return { ...data, fechaHora };
+      })
       .filter(r => r.uid === user.uid)
-      .sort((a, b) => new Date(b.fecha + 'T' + b.hora) - new Date(a.fecha + 'T' + a.hora));
+      .sort((a, b) => b.fechaHora - a.fechaHora);
 
     setRegistros(registrosFiltrados);
 
@@ -106,6 +109,30 @@ const PresionArterialView = () => {
     }
   };
 
+  // Aplicar filtros
+  const registrosFiltrados = registros.filter(r => {
+    if (filtro === "todo") return true;
+
+    const ahora = new Date();
+    const fecha = r.fechaHora;
+
+    if (filtro === "mes") {
+      return fecha.getFullYear() === ahora.getFullYear() && fecha.getMonth() === ahora.getMonth();
+    }
+
+    if (filtro === "semana") {
+      const primerDiaSemana = new Date(ahora);
+      primerDiaSemana.setDate(ahora.getDate() - ahora.getDay());
+
+      const ultimoDiaSemana = new Date(primerDiaSemana);
+      ultimoDiaSemana.setDate(primerDiaSemana.getDate() + 6);
+
+      return fecha >= primerDiaSemana && fecha <= ultimoDiaSemana;
+    }
+
+    return true;
+  });
+
   return (
     <Container className="presion-container mt-4">
       <br />
@@ -128,8 +155,33 @@ const PresionArterialView = () => {
           <TarjetaInformativa />
         </Col>
         <Col md={12}>
+
+        {/* Filtros */}
+      <div className="mb-4">
+        <Button
+          variant={filtro === "todo" ? "dark" : "outline-dark"}
+          onClick={() => setFiltro("todo")}
+          className="me-2"
+        >
+          Todo
+        </Button>
+        <Button
+          variant={filtro === "mes" ? "dark" : "outline-dark"}
+          onClick={() => setFiltro("mes")}
+          className="me-2"
+        >
+          Este Mes
+        </Button>
+        <Button
+          variant={filtro === "semana" ? "dark" : "outline-dark"}
+          onClick={() => setFiltro("semana")}
+        >
+          Esta Semana
+        </Button>
+      </div>
+      
           <ListadoPresiones
-            registros={registros}
+            registros={registrosFiltrados}
             onEdit={(registro) => {
               setDatosEditar(registro);
               setMostrarModal(true);
