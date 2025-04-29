@@ -142,7 +142,7 @@ const PresionArterialView = () => {
       }
     }
   };
-  
+
   const registrosFiltrados = registros.filter(r => {
     if (filtro === "todo") return true;
 
@@ -182,7 +182,7 @@ const PresionArterialView = () => {
 
       <Row>
         <Col md={12} className="mb-3">
-          <TarjetaNormativa ultima={ultimaPresion} resumen={resumenPresion} />
+          <TarjetaNormativa registros={registros} resumen={resumenPresion} />
         </Col>
         <Col md={12} className="mb-4">
           <TarjetaInformativa />
