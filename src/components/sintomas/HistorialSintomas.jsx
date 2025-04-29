@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Buto } from "react";
 import { db, auth } from "../../database/firebaseconfig";
+import { Button } from "react-bootstrap";
+import { PencilSquare, Trash } from "react-bootstrap-icons";
 import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 
 const HistorialSintomas = ({ onEdit }) => {
@@ -44,12 +46,23 @@ const HistorialSintomas = ({ onEdit }) => {
                               {item.otraAnomalia && <p><strong>Otra Anomalía:</strong> {item.otraAnomalia}</p>}
                             </div>
                             <div className="mt-auto text-end">
-                              <button className="btn btn-warning me-2" onClick={() => onEdit(item)}>
-                                Editar
-                              </button>
-                              <button className="btn btn-danger" onClick={() => handleDelete(item.id)}>
-                                Eliminar
-                              </button>
+                            <Button
+                              variant="outline-secondary"
+                              size="sm"
+                              className="me-2"   
+                              onClick={() => onEdit(item)}
+                            >
+                              <PencilSquare size={16} />
+                            </Button>
+
+                            <Button
+                              variant="outline-danger"
+                              size="sm"
+                              onClick={() => handleDelete(item.id)}
+                            >
+                              <Trash size={16} />
+                            </Button>
+
                             </div>
                           </div>
                         </div>
