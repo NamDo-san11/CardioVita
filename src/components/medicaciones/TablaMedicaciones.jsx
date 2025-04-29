@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { FaEdit, FaTrash, FaShareAlt } from "react-icons/fa";
-import ModalCompartirReporte from "./ModalCompartirReporte";
+import ModalCompartirReporte from "../reporte/ModalCompartirReporte";
 
 const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => {
     const [fontSize, setFontSize] = useState("0.85rem");
@@ -23,7 +23,7 @@ const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => 
         <>
         <div style={{ overflowX: "auto", maxWidth: "100%", fontSize }}>
             <div className="mb-2">
-            <Button variant="info" size="sm" onClick={() => setShowModal(true)}>
+            <Button variant="info" onClick={() => setShowModal(true)}>
                 <FaShareAlt /> Compartir Reporte
             </Button>
             </div>

@@ -3,35 +3,36 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import TarjetaNormativa from "../components/presion/TarjetaNormativa";
 import TarjetaInformativa from "../components/presion/TarjetaInformativa";
 import ModalPresion from "../components/presion/ModalPresion";
+import ModalCompartirReportePrecion from "../components/reporte/ModalCompartirReportePrecion";
 import ListadoPresiones from "../components/presion/ListadoPresiones";
 import { db, auth } from "../database/firebaseconfig";
 import ReactGA from "react-ga4";
 import { collection, onSnapshot, addDoc, setDoc, doc, deleteDoc, serverTimestamp } from "firebase/firestore";
+import { FaShareAlt } from "react-icons/fa";
 import "../styles/PresionArterial.css";
 
 const PresionArterialView = () => {
   const [mostrarModal, setMostrarModal] = useState(false);
+  const [mostrarModalCompartir, setMostrarModalCompartir] = useState(false);
   const [datosEditar, setDatosEditar] = useState(null);
   const [ultimaPresion, setUltimaPresion] = useState(null);
   const [resumenPresion, setResumenPresion] = useState(null);
   const [registros, setRegistros] = useState([]);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [filtro, setFiltro] = useState("todo");
-  
+
   useEffect(() => {
     const handleOnline = () => setIsOffline(false);
     const handleOffline = () => setIsOffline(true);
-
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
-
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
     ReactGA.initialize("G-ZPQ0YG91K6");
     ReactGA.send({
       hitType: "pageview",
@@ -92,33 +93,28 @@ const PresionArterialView = () => {
     };
 
     if (datosEditar && datosEditar.id) {
-      // Actualizar localmente primero
       setRegistros(prev => prev.map(r => r.id === datosEditar.id ? { ...r, ...datos } : r));
       try {
         await setDoc(doc(db, "presion_arterial", datosEditar.id), data);
         alert("Registro actualizado exitosamente.");
       } catch (error) {
         console.error("Error al actualizar:", error);
-        if (isOffline) {
-          alert("Sin conexión: se actualizará al reconectar.");
-        } else {
-          alert("Error al actualizar: " + error.message);
-        }
+        alert(isOffline ? "Sin conexión: se actualizará al reconectar." : "Error al actualizar: " + error.message);
       }
     } else {
       const tempId = `temp_${Date.now()}`;
-      const nuevoRegistro = { ...datos, id: tempId, fechaHora: new Date(`${datos.fecha}T${datos.hora.length === 5 ? datos.hora + ":00" : datos.hora}`) };
+      const nuevoRegistro = {
+        ...datos,
+        id: tempId,
+        fechaHora: new Date(`${datos.fecha}T${datos.hora.length === 5 ? datos.hora + ":00" : datos.hora}`)
+      };
       setRegistros(prev => [nuevoRegistro, ...prev]);
       try {
         await addDoc(collection(db, "presion_arterial"), data);
         alert("Registro guardado exitosamente.");
       } catch (error) {
         console.error("Error al guardar:", error);
-        if (isOffline) {
-          alert("Sin conexión: se guardará al reconectar.");
-        } else {
-          alert("Error al guardar: " + error.message);
-        }
+        alert(isOffline ? "Sin conexión: se guardará al reconectar." : "Error al guardar: " + error.message);
       }
     }
 
@@ -134,35 +130,25 @@ const PresionArterialView = () => {
         alert("Registro eliminado exitosamente.");
       } catch (error) {
         console.error("Error al eliminar:", error);
-        if (isOffline) {
-          alert("Sin conexión: eliminación pendiente de sincronizar.");
-        } else {
-          alert("Error al eliminar: " + error.message);
-        }
+        alert(isOffline ? "Sin conexión: eliminación pendiente de sincronizar." : "Error al eliminar: " + error.message);
       }
     }
   };
 
   const registrosFiltrados = registros.filter(r => {
     if (filtro === "todo") return true;
-
     const ahora = new Date();
     const fecha = r.fechaHora;
-
     if (filtro === "mes") {
       return fecha.getFullYear() === ahora.getFullYear() && fecha.getMonth() === ahora.getMonth();
     }
-
     if (filtro === "semana") {
       const primerDiaSemana = new Date(ahora);
       primerDiaSemana.setDate(ahora.getDate() - ahora.getDay());
-
       const ultimoDiaSemana = new Date(primerDiaSemana);
       ultimoDiaSemana.setDate(primerDiaSemana.getDate() + 6);
-
       return fecha >= primerDiaSemana && fecha <= ultimoDiaSemana;
     }
-
     return true;
   });
 
@@ -172,12 +158,17 @@ const PresionArterialView = () => {
       <br />
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2 className="fw-bold text-edit">Presión Arterial</h2>
-        <Button variant="success" onClick={() => {
-          setDatosEditar(null);
-          setMostrarModal(true);
-        }}>
-          + Agregar
-        </Button>
+        <div className="d-flex gap-2">
+          <Button variant="info" onClick={() => setMostrarModalCompartir(true)}>
+            <FaShareAlt /> Compartir Reporte
+          </Button>
+          <Button variant="success" onClick={() => {
+            setDatosEditar(null);
+            setMostrarModal(true);
+          }}>
+            + Agregar
+          </Button>
+        </div>
       </div>
 
       <Row>
@@ -189,26 +180,9 @@ const PresionArterialView = () => {
         </Col>
         <Col md={12}>
           <div className="mb-4">
-            <Button
-              variant={filtro === "todo" ? "dark" : "outline-dark"}
-              onClick={() => setFiltro("todo")}
-              className="me-2"
-            >
-              Todo
-            </Button>
-            <Button
-              variant={filtro === "mes" ? "dark" : "outline-dark"}
-              onClick={() => setFiltro("mes")}
-              className="me-2"
-            >
-              Este Mes
-            </Button>
-            <Button
-              variant={filtro === "semana" ? "dark" : "outline-dark"}
-              onClick={() => setFiltro("semana")}
-            >
-              Esta Semana
-            </Button>
+            <Button variant={filtro === "todo" ? "dark" : "outline-dark"} onClick={() => setFiltro("todo")} className="me-2">Todo</Button>
+            <Button variant={filtro === "mes" ? "dark" : "outline-dark"} onClick={() => setFiltro("mes")} className="me-2">Este Mes</Button>
+            <Button variant={filtro === "semana" ? "dark" : "outline-dark"} onClick={() => setFiltro("semana")}>Esta Semana</Button>
           </div>
 
           <ListadoPresiones
@@ -230,6 +204,12 @@ const PresionArterialView = () => {
         }}
         onGuardar={handleGuardarPresion}
         datosIniciales={datosEditar}
+      />
+
+      <ModalCompartirReportePrecion
+        show={mostrarModalCompartir}
+        onClose={() => setMostrarModalCompartir(false)}
+        registros={registrosFiltrados}
       />
     </Container>
   );

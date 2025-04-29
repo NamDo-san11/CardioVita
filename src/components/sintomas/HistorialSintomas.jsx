@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { db, auth } from "../../database/firebaseconfig";
 import { Button } from "react-bootstrap";
-import { PencilSquare, Trash } from "react-bootstrap-icons";
+import { PencilSquare, Trash, } from "react-bootstrap-icons";
+import { FaShareAlt } from 'react-icons/fa';
 import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
-import ModalCompartirReporteSintomas from "./ModalCompartirReporteSintomas"; // Importamos el modal
+import ModalCompartirReporteSintomas from "../reporte/ModalCompartirReporteSintomas"; // Importamos el modal
 
 const HistorialSintomas = ({ onEdit }) => {
     const [historial, setHistorial] = useState([]);
@@ -41,9 +42,10 @@ const HistorialSintomas = ({ onEdit }) => {
         <div className="container mt-4">
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h2>Historial de Síntomas</h2>
-                <Button variant="primary" onClick={handleOpenModal}>
-                    Compartir Reporte
+                <Button variant="info" onClick={handleOpenModal}>
+                    <FaShareAlt /> Compartir Reporte
                 </Button>
+
             </div>
 
             <div className="row">
