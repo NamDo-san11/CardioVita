@@ -1,97 +1,145 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
+import { Container, Button, ToastContainer, Toast } from "react-bootstrap";
+import { db, auth } from "../database/firebaseconfig";
+import { collection, onSnapshot, addDoc, setDoc, deleteDoc, doc, serverTimestamp } from "firebase/firestore";
 import Cuestionario from "../components/sintomas/Cuestionario";
 import HistorialSintomas from "../components/sintomas/HistorialSintomas";
-import { Container, Row, Col, Button, Card } from "react-bootstrap";
-import { Plus } from "react-bootstrap-icons";
-import  ReactGA  from "react-ga4";
-import "../styles/SintomasView.css"
+import "../styles/SintomasView.css";
 
 const SintomasView = () => {
-  const [editarDatos, setEditarDatos] = useState(null);
   const [mostrarCuestionario, setMostrarCuestionario] = useState(false);
+  const [datosEditar, setDatosEditar] = useState(null);
+  const [registros, setRegistros] = useState([]);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  const [toasts, setToasts] = useState([]);
 
-  //  ? Persitencia de datos notificacion
+  const agregarToast = (mensaje, tipo) => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, mensaje, tipo }]);
+    setTimeout(() => {
+      setToasts(prev => prev.filter(t => t.id !== id));
+    }, 3000);
+  };
+
   useEffect(() => {
-    const handleOnline = () => {
-      setIsOffline(false);
-    };
-    const handleOffline = () => {
-      setIsOffline(true);
-    };
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
-    setIsOffline(!navigator.onLine);
+
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
   }, []);
-  
+
   useEffect(() => {
-    // ?Iniciar Analityc la app
-    ReactGA.initialize("G-ZPQ0YG91K6");
-  
-    ReactGA.send({
-      hitType: 'pageview',
-      page: window.location.pathname,
-      title: 'SintomasView.jsx'
-    })
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const ref = collection(db, "cuestionario_sintomas");
+    const unsubscribe = onSnapshot(ref, (snapshot) => {
+      const fetched = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter(r => r.uid === user.uid)
+        .sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+
+      setRegistros(fetched);
+    }, (error) => {
+      console.error("Error al cargar cuestionarios:", error);
+      agregarToast("Error al cargar datos", "danger");
+    });
+
+    return () => unsubscribe();
   }, []);
-  
-  const handleNuevaEntrada = () => {
-    setEditarDatos(null);
-    setMostrarCuestionario(true);
+
+  const handleGuardarSintoma = async (datos) => {
+    const user = auth.currentUser;
+    if (!user) {
+      agregarToast("Debes iniciar sesión", "danger");
+      return;
+    }
+
+    const data = {
+      ...datos,
+      uid: user.uid,
+      fecha: new Date().toISOString().split("T")[0],
+      timestamp: serverTimestamp(),
+    };
+
+    if (datosEditar && datosEditar.id) {
+      setRegistros(prev => prev.map(r => r.id === datosEditar.id ? { ...r, ...datos } : r));
+      try {
+        await setDoc(doc(db, "cuestionario_sintomas", datosEditar.id), data);
+        agregarToast("Registro actualizado", "success");
+      } catch (error) {
+        console.error("Error al actualizar:", error);
+        agregarToast(isOffline ? "Actualización pendiente" : "Error al actualizar", isOffline ? "warning" : "danger");
+      }
+    } else {
+      const tempId = `temp_${Date.now()}`;
+      const nuevoRegistro = { ...datos, id: tempId };
+      setRegistros(prev => [nuevoRegistro, ...prev]);
+      try {
+        await addDoc(collection(db, "cuestionario_sintomas"), data);
+        agregarToast("Registro agregado", "success");
+      } catch (error) {
+        console.error("Error al agregar:", error);
+        agregarToast(isOffline ? "Registro pendiente" : "Error al guardar", isOffline ? "warning" : "danger");
+      }
+    }
+
+    setMostrarCuestionario(false);
+    setDatosEditar(null);
+  };
+
+  const handleEliminarSintoma = async (id) => {
+    if (window.confirm("¿Eliminar este registro?")) {
+      setRegistros(prev => prev.filter(r => r.id !== id));
+      try {
+        await deleteDoc(doc(db, "cuestionario_sintomas", id));
+        agregarToast("Registro eliminado", "success");
+      } catch (error) {
+        console.error("Error al eliminar:", error);
+        agregarToast(isOffline ? "Eliminación pendiente" : "Error al eliminar", isOffline ? "warning" : "danger");
+      }
+    }
   };
 
   return (
+    <Container className="sintomas-container mt-4">
+      <ToastContainer position="top-end" className="p-3">
+        {toasts.map((toast) => (
+          <Toast key={toast.id} bg={toast.tipo} delay={3000} autohide>
+            <Toast.Body className="text-white">{toast.mensaje}</Toast.Body>
+          </Toast>
+        ))}
+      </ToastContainer>
 
-    <Container className="mt-5">
-      <Row className="justify-content-center mb-4">
-        <Col md={8} className="text-center">
-        <br />
-          <h1 className="fw-bold text-edit">🩺 Registro de Síntomas</h1>
-          <p className="text-muted">
-            Lleva un control diario de tu estado físico y emocional.
-          </p>
-        </Col>
-      </Row>
-
-      {mostrarCuestionario || editarDatos ? (
-        <Row className="justify-content-center">
-          <Col md={10}>
-            <Card className="shadow p-4">
-              <Card.Body>
-                <Cuestionario
-                  datosIniciales={editarDatos}
-                  onFinish={() => {
-                    setEditarDatos(null);
-                    setMostrarCuestionario(false);
-                  }}
-                />
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
+      <h2 className="fw-bold text-edit">Registro de Síntomas</h2>
+      {mostrarCuestionario ? (
+        <Cuestionario
+          datosIniciales={datosEditar}
+          onGuardar={handleGuardarSintoma}
+          onCancelar={() => { setMostrarCuestionario(false); setDatosEditar(null); }}
+        />
       ) : (
         <>
-          <Row className="mb-3 text-center">
-            <Col>
-              <Button variant="success" onClick={handleNuevaEntrada}>
-                <Plus className="me-2" /> Agregar Nuevo Registro
-              </Button>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <HistorialSintomas
-                onEdit={(item) => {
-                  setEditarDatos(item);
-                  setMostrarCuestionario(true);
-                }}
-              />
-            </Col>
-          </Row>
+          <Button variant="success" className="mb-3" onClick={() => {
+            setDatosEditar(null);
+            setMostrarCuestionario(true);
+          }}>
+            + Agregar Registro
+          </Button>
+          <HistorialSintomas
+            registros={registros}
+            onEdit={(registro) => {
+              setDatosEditar(registro);
+              setMostrarCuestionario(true);
+            }}
+            onDelete={handleEliminarSintoma}
+          />
         </>
       )}
     </Container>

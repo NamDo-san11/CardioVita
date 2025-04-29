@@ -6,7 +6,7 @@ import ModalPresion from "../components/presion/ModalPresion";
 import ListadoPresiones from "../components/presion/ListadoPresiones";
 import { db, auth } from "../database/firebaseconfig";
 import ReactGA from "react-ga4";
-import { collection, getDocs, addDoc, setDoc, doc, deleteDoc, serverTimestamp } from "firebase/firestore";
+import { collection, onSnapshot, addDoc, setDoc, doc, deleteDoc, serverTimestamp } from "firebase/firestore";
 import "../styles/PresionArterial.css";
 
 const PresionArterialView = () => {
@@ -17,8 +17,7 @@ const PresionArterialView = () => {
   const [registros, setRegistros] = useState([]);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [filtro, setFiltro] = useState("todo");
-
-  // Detectar online/offline
+  
   useEffect(() => {
     const handleOnline = () => setIsOffline(false);
     const handleOffline = () => setIsOffline(true);
@@ -32,8 +31,7 @@ const PresionArterialView = () => {
     };
   }, []);
 
-  // Google Analytics
-  useEffect(() => {
+    useEffect(() => {
     ReactGA.initialize("G-ZPQ0YG91K6");
     ReactGA.send({
       hitType: "pageview",
@@ -42,35 +40,42 @@ const PresionArterialView = () => {
     });
   }, []);
 
-  const cargarDatos = async () => {
+  useEffect(() => {
     const user = auth.currentUser;
     if (!user) return;
 
-    const snapshot = await getDocs(collection(db, "presion_arterial"));
-    const registrosFiltrados = snapshot.docs
-      .map(doc => {
-        const data = { id: doc.id, ...doc.data() };
-        const fechaHora = new Date(`${data.fecha}T${data.hora.length === 5 ? data.hora + ":00" : data.hora}`);
-        return { ...data, fechaHora };
-      })
-      .filter(r => r.uid === user.uid)
-      .sort((a, b) => b.fechaHora - a.fechaHora);
+    const ref = collection(db, "presion_arterial");
+    const unsubscribe = onSnapshot(ref, (snapshot) => {
+      const fetched = snapshot.docs
+        .map(doc => {
+          const data = { id: doc.id, ...doc.data() };
+          const fechaHora = new Date(`${data.fecha}T${data.hora.length === 5 ? data.hora + ":00" : data.hora}`);
+          return { ...data, fechaHora };
+        })
+        .filter(r => r.uid === user.uid)
+        .sort((a, b) => b.fechaHora - a.fechaHora);
 
-    setRegistros(registrosFiltrados);
+      setRegistros(fetched);
 
-    if (registrosFiltrados.length > 0) {
-      setUltimaPresion(registrosFiltrados[0]);
-      const resumen = { normal: 0, elevada: 0, alta: 0 };
-      registrosFiltrados.forEach(r => {
-        const rango = r.rango?.toLowerCase();
-        if (resumen[rango] !== undefined) resumen[rango]++;
-      });
-      setResumenPresion(resumen);
-    }
-  };
+      if (fetched.length > 0) {
+        setUltimaPresion(fetched[0]);
+        const resumen = { normal: 0, elevada: 0, alta: 0 };
+        fetched.forEach(r => {
+          const rango = r.rango?.toLowerCase();
+          if (resumen[rango] !== undefined) resumen[rango]++;
+        });
+        setResumenPresion(resumen);
+      }
+    }, (error) => {
+      console.error("Error al cargar datos de presión arterial:", error);
+      if (isOffline) {
+        console.log("Offline: mostrando datos en caché local.");
+      } else {
+        alert("Error al cargar datos: " + error.message);
+      }
+    });
 
-  useEffect(() => {
-    cargarDatos();
+    return () => unsubscribe();
   }, []);
 
   const handleGuardarPresion = async (datos) => {
@@ -86,30 +91,58 @@ const PresionArterialView = () => {
       timestamp: serverTimestamp(),
     };
 
-    try {
-      if (datosEditar && datosEditar.id) {
+    if (datosEditar && datosEditar.id) {
+      // Actualizar localmente primero
+      setRegistros(prev => prev.map(r => r.id === datosEditar.id ? { ...r, ...datos } : r));
+      try {
         await setDoc(doc(db, "presion_arterial", datosEditar.id), data);
         alert("Registro actualizado exitosamente.");
-      } else {
+      } catch (error) {
+        console.error("Error al actualizar:", error);
+        if (isOffline) {
+          alert("Sin conexión: se actualizará al reconectar.");
+        } else {
+          alert("Error al actualizar: " + error.message);
+        }
+      }
+    } else {
+      const tempId = `temp_${Date.now()}`;
+      const nuevoRegistro = { ...datos, id: tempId, fechaHora: new Date(`${datos.fecha}T${datos.hora.length === 5 ? datos.hora + ":00" : datos.hora}`) };
+      setRegistros(prev => [nuevoRegistro, ...prev]);
+      try {
         await addDoc(collection(db, "presion_arterial"), data);
         alert("Registro guardado exitosamente.");
+      } catch (error) {
+        console.error("Error al guardar:", error);
+        if (isOffline) {
+          alert("Sin conexión: se guardará al reconectar.");
+        } else {
+          alert("Error al guardar: " + error.message);
+        }
       }
-      setMostrarModal(false);
-      setDatosEditar(null);
-      cargarDatos();
-    } catch (error) {
-      console.error("Error al guardar la presión arterial:", error);
     }
+
+    setMostrarModal(false);
+    setDatosEditar(null);
   };
 
   const handleEliminarPresion = async (id) => {
     if (window.confirm("¿Eliminar este registro?")) {
-      await deleteDoc(doc(db, "presion_arterial", id));
-      cargarDatos();
+      setRegistros(prev => prev.filter(r => r.id !== id));
+      try {
+        await deleteDoc(doc(db, "presion_arterial", id));
+        alert("Registro eliminado exitosamente.");
+      } catch (error) {
+        console.error("Error al eliminar:", error);
+        if (isOffline) {
+          alert("Sin conexión: eliminación pendiente de sincronizar.");
+        } else {
+          alert("Error al eliminar: " + error.message);
+        }
+      }
     }
   };
-
-  // Aplicar filtros
+  
   const registrosFiltrados = registros.filter(r => {
     if (filtro === "todo") return true;
 
@@ -155,31 +188,29 @@ const PresionArterialView = () => {
           <TarjetaInformativa />
         </Col>
         <Col md={12}>
+          <div className="mb-4">
+            <Button
+              variant={filtro === "todo" ? "dark" : "outline-dark"}
+              onClick={() => setFiltro("todo")}
+              className="me-2"
+            >
+              Todo
+            </Button>
+            <Button
+              variant={filtro === "mes" ? "dark" : "outline-dark"}
+              onClick={() => setFiltro("mes")}
+              className="me-2"
+            >
+              Este Mes
+            </Button>
+            <Button
+              variant={filtro === "semana" ? "dark" : "outline-dark"}
+              onClick={() => setFiltro("semana")}
+            >
+              Esta Semana
+            </Button>
+          </div>
 
-        {/* Filtros */}
-      <div className="mb-4">
-        <Button
-          variant={filtro === "todo" ? "dark" : "outline-dark"}
-          onClick={() => setFiltro("todo")}
-          className="me-2"
-        >
-          Todo
-        </Button>
-        <Button
-          variant={filtro === "mes" ? "dark" : "outline-dark"}
-          onClick={() => setFiltro("mes")}
-          className="me-2"
-        >
-          Este Mes
-        </Button>
-        <Button
-          variant={filtro === "semana" ? "dark" : "outline-dark"}
-          onClick={() => setFiltro("semana")}
-        >
-          Esta Semana
-        </Button>
-      </div>
-      
           <ListadoPresiones
             registros={registrosFiltrados}
             onEdit={(registro) => {

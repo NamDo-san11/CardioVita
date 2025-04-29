@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import { db, auth } from "../../database/firebaseconfig";
-import { collection, addDoc, doc, setDoc, serverTimestamp } from "firebase/firestore";
 import EstadoAnimo from "./EstadoAnimo";
 import Sintomas from "./Sintomas";
 import ActividadFisica from "./ActividadFisica";
 import OtraAnomalia from "./OtraAnomalia";
 
-const Cuestionario = ({ datosIniciales = null, onFinish }) => {
+const Cuestionario = ({ datosIniciales = null, onGuardar, onCancelar }) => {
   const [estadoAnimo, setEstadoAnimo] = useState([]);
   const [sintomas, setSintomas] = useState([]);
   const [actividadFisica, setActividadFisica] = useState([]);
@@ -26,40 +24,20 @@ const Cuestionario = ({ datosIniciales = null, onFinish }) => {
     return texto === "" || soloTexto.test(texto);
   };
 
-  const handleGuardarRespuestas = async () => {
-    const user = auth.currentUser;
-    if (!user) {
-      alert("Debes iniciar sesión para guardar tu registro.");
-      return;
-    }
-
+  const handleSubmit = () => {
     if (!validarTexto(otraAnomalia)) {
       alert("La descripción en 'Otra Anomalía' contiene caracteres inválidos.");
       return;
     }
 
-    const data = {
-      uid: user.uid,
+    const datos = {
       estadoAnimo,
       sintomas,
       actividadFisica,
       otraAnomalia,
-      fecha: new Date().toISOString().split("T")[0],
-      timestamp: serverTimestamp(),
     };
 
-    try {
-      if (datosIniciales && datosIniciales.id) {
-        await setDoc(doc(db, "cuestionario_sintomas", datosIniciales.id), data);
-        alert("Respuestas actualizadas correctamente!");
-      } else {
-        await addDoc(collection(db, "cuestionario_sintomas"), data);
-        alert("Respuestas guardadas exitosamente!");
-      }
-      onFinish && onFinish();
-    } catch (error) {
-      console.error("Error al guardar respuestas: ", error);
-    }
+    onGuardar(datos);
   };
 
   return (
@@ -69,9 +47,14 @@ const Cuestionario = ({ datosIniciales = null, onFinish }) => {
       <Sintomas selected={sintomas} setSelected={setSintomas} />
       <ActividadFisica selected={actividadFisica} setSelected={setActividadFisica} />
       <OtraAnomalia otraAnomalia={otraAnomalia} setOtraAnomalia={setOtraAnomalia} />
-      <button className="btn btn-outline-success mt-3"  onClick={handleGuardarRespuestas}>
-        {datosIniciales ? "Actualizar" : "Guardar Respuestas"}
-      </button>
+      <div className="mt-3 d-flex gap-2">
+        <button className="btn btn-outline-success" onClick={handleSubmit}>
+          {datosIniciales ? "Actualizar" : "Guardar Respuestas"}
+        </button>
+        <button className="btn btn-outline-secondary" onClick={onCancelar}>
+          Cancelar
+        </button>
+      </div>
     </div>
   );
 };
