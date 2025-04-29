@@ -5,6 +5,7 @@ import { collection, onSnapshot, addDoc, setDoc, deleteDoc, doc, serverTimestamp
 import Cuestionario from "../components/sintomas/Cuestionario";
 import HistorialSintomas from "../components/sintomas/HistorialSintomas";
 import "../styles/SintomasView.css";
+import ReactGA from "react-ga4";
 
 const SintomasView = () => {
   const [mostrarCuestionario, setMostrarCuestionario] = useState(false);
@@ -12,6 +13,27 @@ const SintomasView = () => {
   const [registros, setRegistros] = useState([]);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [toasts, setToasts] = useState([]);
+  
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  useEffect(() => {
+    ReactGA.initialize("G-ZPQ0YG91K6");
+    ReactGA.send({
+      hitType: "pageview",
+      page: window.location.pathname,
+      title: "PresionArterialView.jsx",
+    });
+  }, []);
+
 
   const agregarToast = (mensaje, tipo) => {
     const id = Date.now();

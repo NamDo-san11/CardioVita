@@ -8,7 +8,7 @@ import SintomasView from "./views/SintomasView";
 import HeartRateMonitor from "./views/HeartRateMonitor";
 import PresionArterialView from "./views/PresionArterialView";
 import AlertasMedicacion from "./views/AlertasMedicacion";
-import EducacionView from "./views/EducacionView";  // <-- NUEVA IMPORTACIÓN
+import EducacionView from "./views/EducacionView";  
 
 import ReactGA from "react-ga4";
 import './App.css';
@@ -38,7 +38,7 @@ function App() {
               <Route path="/corazon" element={<ProtectedRoute element={<HeartRateMonitor />} />} />
               <Route path="/presion" element={<ProtectedRoute element={<PresionArterialView />} />} />
               <Route path="/alertasmedicacion" element={<ProtectedRoute element={<AlertasMedicacion />} />} />
-              <Route path="/educacion" element={<ProtectedRoute element={<EducacionView />} />} /> {/* <-- NUEVA RUTA */}
+              <Route path="/educacion" element={<ProtectedRoute element={<EducacionView />} />} />
             </Routes>
           </main>
         </Router>
