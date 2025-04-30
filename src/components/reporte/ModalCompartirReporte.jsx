@@ -65,7 +65,7 @@ const ModalCompartirReporte = ({ show, onClose, medicaciones }) => {
             <Modal.Title>Compartir o Guardar Reporte</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <p>¿Qué deseas hacer con el reporte?</p>
+            <p>¿Qué deseas hacer con el reporte de alertas de medicación?</p>
             <div className="d-flex justify-content-around mt-3">
 
             <span>Guardar en dispositivo</span>
