@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
-import { FaEdit, FaTrash, FaShareAlt } from "react-icons/fa";
+import { FaShareAlt } from "react-icons/fa";
+import { PencilSquare, Trash, } from "react-bootstrap-icons";
 import ModalCompartirReporte from "../reporte/ModalCompartirReporte";
 
 const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => {
@@ -56,20 +57,25 @@ const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => 
                     <td>{med.fechaFin}</td>
                     <td>
                         <div className="d-flex flex-wrap gap-2">
-                        <button
-                            className="btn btn-warning btn-sm"
+                        <Button
+                            variant="outline-secondary"
+                            size="sm"
+                            className="me-2"
                             onClick={() => openEditModal(med)}
                             title="Editar"
                         >
-                            <FaEdit />
-                        </button>
-                        <button
-                            className="btn btn-danger btn-sm"
+                            <PencilSquare size={16} />
+                        </Button>
+
+                        <Button
+                            variant="outline-danger"
+                            size="sm"
                             onClick={() => openDeleteModal(med)}
                             title="Eliminar"
                         >
-                            <FaTrash />
-                        </button>
+                            <Trash size={16} />
+                        </Button>
+
                         </div>
                     </td>
                     </tr>

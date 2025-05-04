@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { FaDownload, FaShareAlt } from "react-icons/fa";
 
 const ModalCompartirReporte = ({ show, onClose, medicaciones }) => {
 
@@ -64,14 +65,19 @@ const ModalCompartirReporte = ({ show, onClose, medicaciones }) => {
             <Modal.Title>Compartir o Guardar Reporte</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <p>¿Qué deseas hacer con el reporte?</p>
+            <p>¿Qué deseas hacer con el reporte de alertas de medicación?</p>
             <div className="d-flex justify-content-around mt-3">
-            <Button variant="primary" onClick={guardarPDF}>
-                Guardar en dispositivo
+
+            <span>Guardar en dispositivo</span>
+            <Button variant="primary" onClick={guardarPDF} className="d-flex flex-column align-items-center">
+            <FaDownload size={24} />
             </Button>
-            <Button variant="success" onClick={compartirPDF}>
-                Compartir
+
+            <span>Compartir</span>
+            <Button variant="success" onClick={compartirPDF} className="d-flex flex-column align-items-center">
+            <FaShareAlt size={24} />
             </Button>
+
             </div>
         </Modal.Body>
         </Modal>
