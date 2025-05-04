@@ -6,6 +6,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import logo from "../assets/logo.png";
 import { useAuth } from "../database/authcontext";
+import { useLocation } from "react-router-dom";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import "../App.css";
 
@@ -13,6 +14,11 @@ const Encabezado = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const { isLoggedIn, logout } = useAuth();
     const navigate = useNavigate();
+
+    const location = useLocation();
+    const ocultar = location.pathname === "/" || location.pathname === "/registro";
+
+    if (ocultar) return null; // Oculta completamente el header
 
     const handleLogout = async () => {
         try {
@@ -40,6 +46,8 @@ const Encabezado = () => {
         navigate(path);
         setIsCollapsed(false);
     };
+
+    if (ocultar) return null;
 
     return (
         <Navbar expand="sm" fixed="top" className="color-navbar">

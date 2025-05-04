@@ -1,5 +1,6 @@
 import React from "react";
 import { Row, Col, Form, Button, Card, Alert } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import "../App.css";
 
 const LoginForm = ({ email, password, error, setEmail, setPassword, handleSubmit }) => {
@@ -32,8 +33,13 @@ const LoginForm = ({ email, password, error, setEmail, setPassword, handleSubmit
                     required
                     />
                 </Form.Group>
+                
+                <Link to="/registro" className="btn btn-outline-primary mb-3 w-100 text-center">
+                    Registrar Usuario
+                </Link>
 
-                <Button variant="primary" type="submit" className="w-100">
+
+                <Button variant="outline-primary" type="submit" className=" w-100">
                     Iniciar Sesión
                 </Button>
                 </Form>

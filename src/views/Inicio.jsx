@@ -18,7 +18,7 @@ const Inicio = () => {
             <Container>
             <h1>CardioVita</h1>
             <p>Monitorea tu hipertensión. Cuida tu salud.</p>
-            <Button variant="light" onClick={() => handleNavigate("/sintomas")}>
+            <Button variant="light" onClick={() => handleNavigate("/registro")}>
                 Registrar Síntomas
             </Button>
             </Container>

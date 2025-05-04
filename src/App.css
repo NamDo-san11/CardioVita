@@ -7,6 +7,11 @@
     color: #5B6F8F !important;
 }
 
+.ocultar-header {
+  display: none !important;
+}
+
+
 .tarjeta-info {
     border: none;
     background-color: white;

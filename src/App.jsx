@@ -9,7 +9,7 @@ import HeartRateMonitor from "./views/HeartRateMonitor";
 import PresionArterialView from "./views/PresionArterialView";
 import AlertasMedicacion from "./views/AlertasMedicacion";
 import EducacionView from "./views/EducacionView";  
-
+import RegisterView from "./views/RegisterView";
 import ReactGA from "react-ga4";
 import './App.css';
 import { useEffect } from "react";
@@ -33,6 +33,7 @@ function App() {
           <main>
             <Routes>
               <Route path="/" element={<Login />} />
+              <Route path="/registro" element={<RegisterView />} />
               <Route path="/inicio" element={<ProtectedRoute element={<Inicio />} />} />
               <Route path="/sintomas" element={<ProtectedRoute element={<SintomasView />} />} />
               <Route path="/corazon" element={<ProtectedRoute element={<HeartRateMonitor />} />} />
