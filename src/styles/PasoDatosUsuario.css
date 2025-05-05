@@ -1,0 +1,20 @@
+.datos-usuario-form input,
+.datos-usuario-form select,
+.datos-usuario-form textarea {
+  border-radius: 12px;
+  border: 2px solid #dcdcdc;
+  font-size: 1rem;
+  padding: 10px;
+}
+
+.datos-usuario-form input:focus,
+.datos-usuario-form select:focus,
+.datos-usuario-form textarea:focus {
+  border-color: #5B6F8F;
+  box-shadow: 0 0 5px rgba(91, 111, 143, 0.3);
+}
+
+.datos-usuario-form label {
+  margin-bottom: 6px;
+  color: #333;
+}

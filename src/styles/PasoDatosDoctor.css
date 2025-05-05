@@ -1,0 +1,19 @@
+.datos-doctor-form input,
+.datos-doctor-form select,
+.datos-doctor-form textarea {
+  border-radius: 12px;
+  border: 2px solid #dcdcdc;
+  font-size: 1rem;
+  padding: 10px;
+}
+
+.datos-doctor-form input:focus,
+.datos-doctor-form select:focus {
+  border-color: #719EC0;
+  box-shadow: 0 0 5px rgba(113, 158, 192, 0.4);
+}
+
+.datos-doctor-form label {
+  margin-bottom: 6px;
+  color: #333;
+}
