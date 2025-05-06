@@ -1,4 +1,8 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getDoc, doc } from "firebase/firestore";
+import { db } from "../database/firebaseconfig";
+import { useAuth } from "../database/authcontext";
 import { Button, Container, Row, Col, Card } from "react-bootstrap";
 import "aos/dist/aos.css";
 import "../styles/Inicio.css";
@@ -6,6 +10,21 @@ import Imagen from "../assets/Frecuenciacardiaca.jpg";
 
 const Inicio = () => {
     const navigate = useNavigate();
+    const { user } = useAuth();
+    const [perfil, setPerfil] = useState(null);
+
+    useEffect(() => {
+        const obtenerPerfil = async () => {
+            if (user) {
+                const ref = doc(db, "usuarios", user.uid);
+                const docSnap = await getDoc(ref);
+                if (docSnap.exists()) {
+                    setPerfil(docSnap.data());
+                }
+            }
+        };
+        obtenerPerfil();
+    }, [user]);
 
     const handleNavigate = (path) => {
         navigate(path);
@@ -18,11 +37,41 @@ const Inicio = () => {
             <Container>
             <h1>CardioVita</h1>
             <p>Monitorea tu hipertensión. Cuida tu salud.</p>
-            <Button variant="light" onClick={() => handleNavigate("/registro")}>
-                Registrar Síntomas
-            </Button>
             </Container>
+            
         </header>
+
+        {/* Perfil del usuario */}
+        {perfil && (
+            <Container className="my-5">
+                <Card className="shadow rounded text-center p-4">
+                    <Row className="align-items-center">
+                        <Col md={2}>
+                            <img
+                                src={perfil.foto || "https://via.placeholder.com/80"}
+                                alt="Foto perfil"
+                                className="rounded-circle"
+                                width="80"
+                                height="80"
+                            />
+                        </Col>
+                        <Col md={10} className="text-start">
+                            <h5>{perfil.nombre}</h5>
+                            <p className="mb-1 text-muted">Correo: {perfil.correo || "N/A"}</p>
+                            <p className="mb-1">Pesa {perfil.peso || "??"} kg</p>
+                            <p className="mb-1">
+                             Diagnosticado con {perfil.enfermedades || "Sin diagnóstico registrado"}
+                            </p>
+                            <div className="mt-3">
+                                <Button variant="outline-secondary" className="me-2" onClick={() => navigate("/verperfil")}>
+                                    Más información
+                                </Button>
+                            </div>
+                        </Col>
+                    </Row>
+                </Card>
+            </Container>
+        )}
 
         {/* Ventajas */}
         <section className="inicio-section bg-light" data-aos="fade-up">

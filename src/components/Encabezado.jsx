@@ -85,6 +85,11 @@ const Encabezado = () => {
                         {isCollapsed && <i className="bi bi-thermometer-half me-2"></i>}
                         <strong>Síntomas</strong>
                     </Nav.Link>
+                    
+                    <Nav.Link onClick={() => handleNavigate("/educacion")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
+                        {isCollapsed && <i className="bi bi-journal-text me-2"></i>}
+                        <strong>Educación</strong>
+                    </Nav.Link>
 
                     <Nav.Link onClick={() => handleNavigate("/presion")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
                         {isCollapsed && <i className="bi bi-heart-pulse-fill me-2"></i>}
@@ -112,4 +117,3 @@ const Encabezado = () => {
 };
 
 export default Encabezado;
-    

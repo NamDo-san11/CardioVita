@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
+import "../../styles/PasoDatosUsuario.css"
 
 const PasoDatosUsuario = ({ datos, handleChange, setBotonActivo }) => {
   const [errores, setErrores] = useState({});

@@ -1,27 +1,33 @@
 import { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
+import "../../styles/PasoDatosDoctor.css"
 
 const PasoDatosDoctor = ({ datos, handleChange, setBotonActivo }) => {
-  const [cedulaValida, setCedulaValida] = useState(true);
+  const [touchedCedula, setTouchedCedula] = useState(false);
 
-  // Validar y formatear automáticamente
-  const handleCedulaChange = (e) => {
-    let value = e.target.value.replace(/[^\dA-Za-z]/g, ""); // Solo dígitos y letras
-    if (value.length >= 3 && value.length <= 15) {
-      // Insertar guiones
-      value = value
-        .replace(/^(\d{3})(\d{0,8})/, "$1-$2")
-        .replace(/^(\d{3}-\d{6,8})(\d{0,4}[A-Za-z]?)$/, "$1-$2");
+  const formatearCedula = (valor) => {
+    const limpio = valor.replace(/[^0-9a-zA-Z]/g, "").toUpperCase();
+    let formateado = limpio;
+
+    if (limpio.length > 3 && limpio.length <= 9) {
+      formateado = `${limpio.slice(0, 3)}-${limpio.slice(3)}`;
+    } else if (limpio.length > 9 && limpio.length <= 13) {
+      formateado = `${limpio.slice(0, 3)}-${limpio.slice(3, 9)}-${limpio.slice(9)}`;
+    } else if (limpio.length > 13) {
+      formateado = `${limpio.slice(0, 3)}-${limpio.slice(3, 9)}-${limpio.slice(9, 13)}${limpio.slice(13, 14)}`;
     }
 
-    handleChange("cedula", value);
-
-    // Validar formato completo
-    const regex = /^\d{3}-\d{6,8}-\d{4}[A-Z]?$/;
-    setCedulaValida(regex.test(value));
+    return formateado;
   };
 
-  // Desactivar botón si está inválido
+  const handleCedulaChange = (e) => {
+    const formateado = formatearCedula(e.target.value);
+    handleChange("cedula", formateado);
+  };
+
+  const regexCedula = /^\d{3}-\d{6,8}-\d{4}[A-Z]$/;
+  const esCedulaValida = regexCedula.test(datos.cedula || "");
+
   useEffect(() => {
     const camposRequeridos = [
       "especialidad",
@@ -31,8 +37,7 @@ const PasoDatosDoctor = ({ datos, handleChange, setBotonActivo }) => {
       "centroTrabajo",
     ];
     const todosLlenos = camposRequeridos.every((campo) => datos[campo]?.trim() !== "");
-    const cedulaCorrecta = /^\d{3}-\d{6,8}-\d{4}[A-Z]?$/.test(datos.cedula || "");
-    setBotonActivo(todosLlenos && cedulaCorrecta);
+    setBotonActivo(todosLlenos && esCedulaValida);
   }, [datos, setBotonActivo]);
 
   return (
@@ -66,14 +71,16 @@ const PasoDatosDoctor = ({ datos, handleChange, setBotonActivo }) => {
         <Form.Control
           type="text"
           name="cedula"
+          placeholder="Ej. 123-123456-1000F"
           value={datos.cedula || ""}
           onChange={handleCedulaChange}
-          placeholder="Ej. 001-090789-1234Z"
-          isInvalid={!cedulaValida && datos.cedula?.length > 0}
+          onBlur={() => setTouchedCedula(true)}
+          isInvalid={touchedCedula && datos.cedula?.length >= 18 && !esCedulaValida}
+          maxLength={18}
           required
         />
         <Form.Control.Feedback type="invalid">
-          Formato inválido. Ejemplo válido: <strong>001-090789-1234Z</strong>
+          Cédula inválida. Formato: 123-123456-1000F
         </Form.Control.Feedback>
       </Form.Group>
 
