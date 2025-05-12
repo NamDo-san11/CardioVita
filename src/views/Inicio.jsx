@@ -7,6 +7,8 @@ import { Button, Container, Row, Col, Card } from "react-bootstrap";
 import "aos/dist/aos.css";
 import "../styles/Inicio.css";
 import Imagen from "../assets/Frecuenciacardiaca.jpg";
+import Idefault from "../assets/default.jpeg"
+
 
 const Inicio = () => {
     const navigate = useNavigate();
@@ -48,7 +50,7 @@ const Inicio = () => {
                     <Row className="align-items-center">
                         <Col md={2}>
                             <img
-                                src={perfil.foto || "https://via.placeholder.com/80"}
+                                src={perfil.foto || Idefault}
                                 alt="Foto perfil"
                                 className="rounded-circle"
                                 width="80"

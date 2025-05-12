@@ -1,12 +1,46 @@
 .perfil-card {
-    background-color: #ffffff;
-    border: 2px solid #e3e3e3;
-    border-radius: 18px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease-in-out;
-  }
-  
-  .perfil-card:hover {
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  }
-  
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.perfil-foto {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #0a58ca;
+}
+
+.perfil-info {
+  flex-grow: 1;
+  min-width: 250px;
+}
+
+.perfil-info h5 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.perfil-info p {
+  margin-bottom: 0.3rem;
+  font-size: 1rem;
+}
+
+.perfil-botones {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.perfil-label {
+  font-weight: bold;
+  color: #0a58ca;
+}

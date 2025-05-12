@@ -1,53 +1,66 @@
 import React from "react";
-import { Card, Button, Row, Col, Image } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import "../../styles/PerfilUsuarioCard.css";
 
-const PerfilUsuarioCard = ({ usuario, onVerMas, onFrecuencia }) => {
-    return (
-        <Card className="perfil-card p-4">
-        <Row className="align-items-center">
-            <Col xs={12} md={3} className="text-center mb-3 mb-md-0">
-            <Image
-                src={usuario.foto || "/default-avatar.png"}
-                roundedCircle
-                width={90}
-                height={90}
-                className="mb-2"
-            />
-            <h6 className="mb-0">{usuario.nombre || "Nombre Usuario"}</h6>
-            <small className="text-muted">{usuario.rol === "doctor" ? "Médico" : "Usuario"}</small>
-            </Col>
+const PerfilUsuarioCard = ({ datos, onEditar }) => {
+  const {
+    nombre,
+    correo,
+    rol,
+    edad,
+    peso,
+    estatura,
+    enfermedades,
+    herencia,
+    foto,
+    especialidad,
+    cedula,
+    colegiacion,
+    experiencia,
+    centroTrabajo,
+  } = datos;
 
-            <Col xs={12} md={6} className="text-center text-md-start">
-            <p className="mb-1">
-                <strong>De:</strong> {usuario.ciudad || "No especificado"}
-            </p>
-            {usuario.rol === "usuario" ? (
-                <>
-                <p className="mb-1"><strong>Pesa:</strong> {usuario.peso || "N/D"} kg</p>
-                <p className="mb-1"><strong>Diagnóstico:</strong> {usuario.enfermedades || "Ninguno"}</p>
-                </>
-            ) : (
-                <>
-                <p className="mb-1"><strong>Especialidad:</strong> {usuario.especialidad || "N/D"}</p>
-                <p className="mb-1"><strong>Centro:</strong> {usuario.centroTrabajo || "N/D"}</p>
-                </>
-            )}
-            </Col>
+  return (
+    <div className="perfil-card">
+      <img
+        src={foto || "https://via.placeholder.com/150"}
+        alt="Perfil"
+        className="perfil-foto"
+      />
 
-            <Col xs={12} md={3} className="text-center text-md-end mt-3 mt-md-0">
-            <Button variant="outline-secondary" size="sm" className="me-2" onClick={onVerMas}>
-                Más información
-            </Button>
-            {usuario.rol === "usuario" && (
-                <Button variant="primary" size="sm" onClick={onFrecuencia}>
-                Frecuencia cardíaca
-                </Button>
-            )}
-            </Col>
-        </Row>
-        </Card>
-    );
+      <div className="perfil-info">
+        <h5>{nombre}</h5>
+        <p><span className="perfil-label">Correo:</span> {correo}</p>
+        <p><span className="perfil-label">Rol:</span> {rol}</p>
+
+        {rol === "usuario" && (
+          <>
+            <p><span className="perfil-label">Edad:</span> {edad} años</p>
+            <p><span className="perfil-label">Peso:</span> {peso} kg</p>
+            <p><span className="perfil-label">Estatura:</span> {estatura} m</p>
+            <p><span className="perfil-label">Enfermedades:</span> {enfermedades || "No registradas"}</p>
+            <p><span className="perfil-label">Historial Familiar:</span> {herencia === "si" ? "Sí" : "No"}</p>
+          </>
+        )}
+
+        {rol === "doctor" && (
+          <>
+            <p><span className="perfil-label">Especialidad:</span> {especialidad}</p>
+            <p><span className="perfil-label">Cédula:</span> {cedula}</p>
+            <p><span className="perfil-label">N° Colegiación:</span> {colegiacion}</p>
+            <p><span className="perfil-label">Años de experiencia:</span> {experiencia}</p>
+            <p><span className="perfil-label">Centro de trabajo:</span> {centroTrabajo}</p>
+          </>
+        )}
+
+        <div className="perfil-botones">
+          <Button variant="outline-primary" onClick={onEditar}>
+            Editar Perfil
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default PerfilUsuarioCard;
