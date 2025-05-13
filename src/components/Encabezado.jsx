@@ -107,11 +107,19 @@ const Encabezado = () => {
                   </Nav.Link>
 
                   <Nav.Link
-                    onClick={() => handleNavigate("/chat")}
+                    onClick={() => handleNavigate("/presion")}
                     className={isCollapsed ? "color-texto-marca" : "text-white"}
                   >
                     {isCollapsed && <i className="bi bi-heart-pulse-fill me-2"></i>}
                     <strong>Presión Arterial</strong>
+                  </Nav.Link>
+
+                  <Nav.Link
+                    onClick={() => handleNavigate("/chat")}
+                    className={isCollapsed ? "color-texto-marca" : "text-white"}
+                  >
+                    {isCollapsed && <i className="bi bi-chat-left-text me-2"></i>}
+                    <strong>Consultas</strong>
                   </Nav.Link>
 
                   <Nav.Link
