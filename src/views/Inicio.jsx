@@ -61,9 +61,9 @@ const Inicio = () => {
                         <Col md={10} className="text-start">
                             <h5>{perfil.nombre}</h5>
                             <p className="mb-1 text-muted">Correo: {perfil.correo || "N/A"}</p>
-                            <p className="mb-1">Pesa {perfil.peso || "??"} kg</p>
+                            <p className="mb-1">Pesa    {perfil.peso || "??"} kg</p>
                             <p className="mb-1">
-                                Diagnosticado con {perfil.enfermedades || "Sin diagnóstico registrado"}
+                                Emfermdades: {perfil.enfermedades || "sin Emfermdades"}
                             </p>
                             <div className="mt-3">
                                 <Button variant="outline-secondary" className="me-2" onClick={() => navigate("/verperfil")}>

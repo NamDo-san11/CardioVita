@@ -9,8 +9,7 @@ const ChatbotDialogflow = () => {
       script.async = true;
       document.body.appendChild(script);
     }
-
-    // Crear solo si no existe ya el tag
+    
     if (!document.querySelector("df-messenger")) {
       const dfMessenger = document.createElement("df-messenger");
       dfMessenger.setAttribute("intent", "WELCOME");
@@ -21,7 +20,7 @@ const ChatbotDialogflow = () => {
     }
   }, []);
 
-  return null; // No renderiza JSX directamente
+  return null; 
 };
 
 export default ChatbotDialogflow;

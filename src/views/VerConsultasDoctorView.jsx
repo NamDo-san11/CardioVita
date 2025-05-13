@@ -87,12 +87,12 @@ useEffect(() => {
       <ToastContainer position="top-end" className="p-3">
         {toasts.map((toast) => (
           <Toast key={toast.id} bg={toast.tipo} delay={3000} autohide>
-            <Toast.Body className="text-white">{toast.mensaje}</Toast.Body>
+            <Toast.Body className="text-black">{toast.mensaje}</Toast.Body>
           </Toast>
         ))}
       </ToastContainer>
 
-      <h2 className="text-white mb-4">Consultas de Usuarios</h2>
+      <h2 className="text-black mb-4">Consultas de Usuarios</h2>
 
       {loading ? (
         <div className="text-white text-center">
