@@ -129,6 +129,14 @@ const Encabezado = () => {
                     {isCollapsed && <i className="bi bi-capsule me-2"></i>}
                     <strong>Alertas</strong>
                   </Nav.Link>
+
+                  <Nav.Link
+                    onClick={() => handleNavigate("/notificacionpaciente")}
+                    className={isCollapsed ? "color-texto-marca" : "text-white"}
+                  >
+                    {isCollapsed && <i className="bi bi-capsule me-2"></i>}
+                    <strong>Notificación</strong>
+                  </Nav.Link>
                 </>
               )}
 
@@ -148,6 +156,14 @@ const Encabezado = () => {
                   >
                     {isCollapsed && <i className="bi bi-people me-2"></i>}
                     <strong>Pacientes</strong>
+                  </Nav.Link>
+
+                  <Nav.Link
+                    onClick={() => handleNavigate("/alertasderiesgo")}
+                    className={isCollapsed ? "color-texto-marca" : "text-white"}
+                  >
+                    {isCollapsed && <i className="bi bi-people me-2"></i>}
+                    <strong>Alertas de Riesgo</strong>
                   </Nav.Link>
                 </>
               )}
