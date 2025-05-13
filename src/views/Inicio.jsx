@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getDoc, doc } from "firebase/firestore";
-import { db } from "../database/firebaseconfig";
+import { db } from "../database/firebaseConfig";
 import { useAuth } from "../database/authcontext";
 import { Button, Container, Row, Col, Card } from "react-bootstrap";
 import "aos/dist/aos.css";
 import "../styles/Inicio.css";
 import Imagen from "../assets/Frecuenciacardiaca.jpg";
+import ChatBotIntegrado from "../components/ChatBotIntegrado";
 import Idefault from "../assets/default.jpeg"
 
 
@@ -126,6 +127,7 @@ const Inicio = () => {
                 />
                 </Col>
             </Row>
+            <ChatBotIntegrado />
             </Container>
         </section>
 
