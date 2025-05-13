@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Alert } from "react-bootstrap";
 import Paso1 from "../components/registro/Paso1";
 import Paso2 from "../components/registro/Paso2";
-import { db, auth, storage } from "../database/firebaseConfig";
+import { db, auth, storage } from "../database/firebaseconfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";

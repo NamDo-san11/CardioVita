@@ -4,7 +4,7 @@ import { Container, Nav, Navbar, Offcanvas } from "react-bootstrap";
 import logo from "../assets/logo.png";
 import { useAuth } from "../database/authcontext";
 import { doc, getDoc } from "firebase/firestore";
-import { db,auth } from "../database/firebaseConfig";
+import { db} from "../database/firebaseconfig";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import "../App.css";
 

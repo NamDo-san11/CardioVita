@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
 import { useAuth } from "../database/authcontext";
-import { db } from "../database/firebaseConfig";
+import { db } from "../database/firebaseconfig";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import PerfilUsuarioCard from "../components/perfil/PerfilUsuarioCard";
 import PerfilForm from "../components/perfil/PerfilForm";

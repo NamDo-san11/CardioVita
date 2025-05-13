@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { db } from "../database/firebaseConfig";
+import { db } from "../database/firebaseconfig";
 import { collection, getDocs } from "firebase/firestore";
 import { Spinner } from "react-bootstrap";
 import PacienteTable from "../components/pacientes/PacienteTable";

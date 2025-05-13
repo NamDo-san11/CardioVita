@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getDoc, doc } from "firebase/firestore";
-import { db } from "../database/firebaseConfig";
+import { db } from "../database/firebaseconfig";
 import { useAuth } from "../database/authcontext";
 import { Button, Container, Row, Col, Card } from "react-bootstrap";
 import "aos/dist/aos.css";
