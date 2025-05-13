@@ -10,7 +10,7 @@ const ChatbotDialogflow = () => {
 
   return (
     <df-messenger
-      intent="WELCOME"
+      intent="BIENVENIDO"
       chat-title="Fushi"
       agent-id="c1192ce0-8275-410b-abce-2ead1dbf2613"
       language-code="es"
