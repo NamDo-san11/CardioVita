@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { db, auth } from "../../database/firebaseconfig";
+import { db, auth } from "../../database/firebaseConfig";
 import { Button } from "react-bootstrap";
 import { PencilSquare, Trash, } from "react-bootstrap-icons";
 import { FaShareAlt } from 'react-icons/fa';

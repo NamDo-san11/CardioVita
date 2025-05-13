@@ -48,7 +48,7 @@ const PerfilUsuarioCard = ({ datos, onEditar }) => {
             <p><span className="perfil-label">Especialidad:</span> {especialidad}</p>
             <p><span className="perfil-label">Cédula:</span> {cedula}</p>
             <p><span className="perfil-label">N° Colegiación:</span> {colegiacion}</p>
-            <p><span className="perfil-label">Años de experiencia:</span> {experiencia}</p>
+            <p><span className="perfil-label">Años de experiencia:</span> {experiencia} años</p>
             <p><span className="perfil-label">Centro de trabajo:</span> {centroTrabajo}</p>
           </>
         )}

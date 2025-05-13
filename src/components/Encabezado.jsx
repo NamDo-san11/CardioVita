@@ -4,7 +4,7 @@ import { Container, Nav, Navbar, Offcanvas } from "react-bootstrap";
 import logo from "../assets/logo.png";
 import { useAuth } from "../database/authcontext";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../database/firebaseconfig";
+import { db } from "../database/firebaseConfig";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import "../App.css";
 
@@ -107,7 +107,7 @@ const Encabezado = () => {
                   </Nav.Link>
 
                   <Nav.Link
-                    onClick={() => handleNavigate("/presion")}
+                    onClick={() => handleNavigate("/chat")}
                     className={isCollapsed ? "color-texto-marca" : "text-white"}
                   >
                     {isCollapsed && <i className="bi bi-heart-pulse-fill me-2"></i>}
@@ -127,19 +127,19 @@ const Encabezado = () => {
               {rolUsuario === "doctor" && (
                 <>
                   <Nav.Link
-                    onClick={() => handleNavigate("/verusuarios")}
+                    onClick={() => handleNavigate("/chadoct")}
                     className={isCollapsed ? "color-texto-marca" : "text-white"}
                   >
-                    {isCollapsed && <i className="bi bi-people-fill me-2"></i>}
-                    <strong>Pacientes</strong>
+                    {isCollapsed && <i className="bi bi-chat-left-text me-2"></i>}
+                    <strong>Consultas</strong>
                   </Nav.Link>
 
                   <Nav.Link
-                    onClick={() => handleNavigate("/reportes")}
+                    onClick={() => handleNavigate("/pacientes")}
                     className={isCollapsed ? "color-texto-marca" : "text-white"}
                   >
-                    {isCollapsed && <i className="bi bi-bar-chart-fill me-2"></i>}
-                    <strong>Reportes</strong>
+                    {isCollapsed && <i className="bi bi-people me-2"></i>}
+                    <strong>Pacientes</strong>
                   </Nav.Link>
                 </>
               )}

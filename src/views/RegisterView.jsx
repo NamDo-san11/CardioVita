@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Alert } from "react-bootstrap";
 import Paso1 from "../components/registro/Paso1";
 import Paso2 from "../components/registro/Paso2";
-import { db, auth, storage } from "../database/firebaseconfig";
+import { db, auth, storage } from "../database/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
@@ -63,6 +63,9 @@ const RegisterView = () => {
         herencia: datos.herencia,
         especialidad: datos.rol === "doctor" ? datos.especialidad : "",
         cedula: datos.rol === "doctor" ? datos.cedula : "",
+        colegiacion: datos.rol === "doctor" ? datos.colegiacion : "",
+        experiencia: datos.rol === "doctor" ? datos.experiencia : "",
+        centroTrabajo: datos.rol === "doctor" ? datos.centroTrabajo : "",
         timestamp: serverTimestamp(),
       };
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Container, Button, ToastContainer, Toast } from "react-bootstrap";
-import { db, auth } from "../database/firebaseconfig";
+import { db, auth } from "../database/firebaseConfig";
 import { collection, onSnapshot, addDoc, setDoc, deleteDoc, doc, serverTimestamp } from "firebase/firestore";
 import Cuestionario from "../components/sintomas/Cuestionario";
 import HistorialSintomas from "../components/sintomas/HistorialSintomas";
