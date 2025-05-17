@@ -7,8 +7,8 @@ import { Button, Container, Row, Col, Card } from "react-bootstrap";
 import "aos/dist/aos.css";
 import "../styles/Inicio.css";
 import Imagen from "../assets/Frecuenciacardiaca.jpg";
-import ModalInstalacionIOS from "../components/Ini/ModalInstalacionIOS";
-import ChatBotIntegrado from "../components/ChatBotIntegrado";
+import ModalInstalacionIOS from "../components/inicio/ModalInstalacionIOS";
+import ChatBotIntegrado from "../components/inicio/ChatBotIntegrado"
 import Idefault from "../assets/default.jpeg"
 
 
