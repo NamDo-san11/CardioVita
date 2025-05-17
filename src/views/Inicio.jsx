@@ -7,6 +7,7 @@ import { Button, Container, Row, Col, Card } from "react-bootstrap";
 import "aos/dist/aos.css";
 import "../styles/Inicio.css";
 import Imagen from "../assets/Frecuenciacardiaca.jpg";
+import ModalInstalacionIOS from "../components/Ini/ModalInstalacionIOS";
 import ChatBotIntegrado from "../components/ChatBotIntegrado";
 import Idefault from "../assets/default.jpeg"
 
@@ -15,7 +16,51 @@ const Inicio = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
     const [perfil, setPerfil] = useState(null);
+    const [solicitudInstalacion, setSolicitudInstalacion] = useState(null);
+    const [mostrarBotonInstalacion, setMostrarBotonInstalacion] = useState(false);
+    const [esDispositivoIOS, setEsDispositivoIOS] = useState(false);
+    const [mostrarModalInstrucciones, setMostrarModalInstrucciones] = useState(false);
 
+    const abrirModalInstrucciones = () => setMostrarModalInstrucciones(true);
+    const cerrarModalInstrucciones = () => setMostrarModalInstrucciones(false);
+
+    // Detectar si el dispositivo es iOS
+    useEffect(() => {
+        const esIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        setEsDispositivoIOS(esIOS);
+    }, []);
+
+    // Capturar el evento beforeinstallprompt
+    useEffect(() => {
+        const manejarSolicitudInstalacion = (evento) => {
+        evento.preventDefault();
+        setSolicitudInstalacion(evento);
+        setMostrarBotonInstalacion(true);
+        };
+
+        window.addEventListener("beforeinstallprompt", manejarSolicitudInstalacion);
+
+        return () => {
+        window.removeEventListener("beforeinstallprompt", manejarSolicitudInstalacion);
+        };
+    }, []);
+
+    // Función para lanzar el prompt de instalación
+    const instalacion = async () => {
+        if (!solicitudInstalacion) return;
+
+        try {
+        await solicitudInstalacion.prompt();
+        const { outcome } = await solicitudInstalacion.userChoice;
+        console.log(outcome === "accepted" ? "Instalación aceptada" : "Instalación rechazada");
+        } catch (error) {
+        console.error("Error al intentar instalar la PWA:", error);
+        } finally {
+        setSolicitudInstalacion(null);
+        setMostrarBotonInstalacion(false);
+        }
+    };
+    
     useEffect(() => {
         const obtenerPerfil = async () => {
             if (user) {
@@ -41,6 +86,30 @@ const Inicio = () => {
             <h1>CardioVita</h1>
             <p>Monitorea tu hipertensión. Cuida tu salud.</p>
             </Container>
+                {/* Botón para Android/otros */}
+        {!esDispositivoIOS && mostrarBotonInstalacion && (
+            <div className="my-4">
+            
+            <Button className="sombra" variant="primary" onClick={instalacion}>
+                Instalar app <i className="bi bi-download"></i>
+            </Button>
+            </div>
+        )}
+
+        {/* Botón para iOS */}
+        {esDispositivoIOS && (
+            <div className="text-center my-4">
+            <Button className="sombra" variant="primary" onClick={abrirModalInstrucciones}>
+                Cómo instalar en iPhone <i className="bi bi-phone"></i>
+            </Button>
+            </div>
+        )}
+
+        {/* Modal de instrucciones para iOS */}
+        <ModalInstalacionIOS
+            mostrar={mostrarModalInstrucciones}
+            cerrar={cerrarModalInstrucciones}
+        />
             
         </header>
 

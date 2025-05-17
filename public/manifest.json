@@ -1,0 +1,33 @@
+{
+    "name": "Cardiovita",
+    "short_name": "Cardiovita",
+    "descripcion": "Las personas miserables necesitan que existan personas más miserables que ellas para sentirse felices.",
+    "start_url": "/",
+    "background_color": "#ffffff",
+    "theme_color": "#212327",
+    "scope": "/",
+    "icon": [
+        {
+            "src":"/icons/salud128x128.png",
+            "sizes": "128×128",
+            "type": "image/png"
+        },
+        {
+            "src":"/icons/salud512x512.png",
+            "sizes": "512×512",
+            "type": "image/png"
+        },
+        {
+            "src":"/assets/salud.png",
+            "sizes": "128×128",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src":"/assets/salud.png", 
+            "sizes": "512×512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]    
+}
