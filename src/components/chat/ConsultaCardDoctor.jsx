@@ -44,7 +44,7 @@ const ConsultaCardDoctor = ({ consulta, onResponder }) => {
               placeholder="Escribe tu respuesta aquí..."
             />
           </Form.Group>
-          <Button type="submit" variant="primary" size="sm">
+          <Button type="submit" variant="outline-info" size="sm">
             Guardar Respuesta
           </Button>
         </Form>

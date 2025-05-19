@@ -166,10 +166,10 @@ const ModalRegistroMedicacion = ({ show, onHide, onMedicacionAgregada }) => {
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={onHide}>
+                <Button variant="outline-secondary" onClick={onHide}>
                     Cancelar
                 </Button>
-                <Button variant="primary" onClick={handleGuardar}>
+                <Button variant="outline-info" onClick={handleGuardar}>
                     Guardar
                 </Button>
             </Modal.Footer>

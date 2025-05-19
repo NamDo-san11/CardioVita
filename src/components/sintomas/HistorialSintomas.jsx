@@ -42,7 +42,7 @@ const HistorialSintomas = ({ onEdit }) => {
         <div className="container mt-4">
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h2>Historial de Síntomas</h2>
-                <Button variant="info" onClick={handleOpenModal}>
+                <Button variant="outline-info" onClick={handleOpenModal}>
                     <FaShareAlt /> Compartir Reporte
                 </Button>
 

@@ -64,19 +64,24 @@ const ModalCompartirReportePresion = ({ show, onClose, registros }) => {
         </Modal.Header>
         <Modal.Body>
             <p>¿Qué deseas hacer con el reporte de presión arterial?</p>
-            <div className="d-flex justify-content-around mt-3">
+                <div className="d-flex justify-content-around mt-3">
 
-            <span>Guardar en dispositivo</span>
-            <Button variant="primary" onClick={guardarPDF} className="d-flex flex-column align-items-center">
-            <FaDownload size={24} />
-            </Button>
+                <div className="text-center">
+                    <Button variant="outline-info" onClick={guardarPDF} className="d-flex flex-column align-items-center">
+                    <FaDownload size={24} />
+                    <div className="mt-1">Guardar</div>
+                    </Button>
+                </div>
 
-            <span>Compartir</span>
-            <Button variant="success" onClick={compartirPDF} className="d-flex flex-column align-items-center">
-            <FaShareAlt size={24} />
-            </Button>
+                <div className="text-center">
+                    <Button variant="outline-success" onClick={compartirPDF} className="d-flex flex-column align-items-center">
+                    <FaShareAlt size={24} />
+                    <div className="mt-1">Compartir</div>
+                    </Button>
+                </div>
 
-            </div>
+                </div>
+
         </Modal.Body>
         </Modal>
     );

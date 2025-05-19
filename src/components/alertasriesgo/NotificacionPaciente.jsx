@@ -1,47 +1,53 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../../database/firebaseconfig";
-import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { Card, Container, Spinner, Alert } from "react-bootstrap";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const NotificacionPaciente = () => {
     const [mensajes, setMensajes] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchMensajes = async () => {
-            try {
-                const auth = getAuth();
-                const user = auth.currentUser;
+        const auth = getAuth();
 
-                if (!user) {
-                    console.error("Usuario no autenticado");
-                    setLoading(false);
-                    return;
-                }
+        // Esperar a que se cargue el usuario
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                console.error("Usuario no autenticado");
+                setLoading(false);
+                return;
+            }
+
+            try {
+                console.log("Usuario autenticado:", user.uid);
 
                 const mensajesRef = collection(db, "mensajes_riesgo");
-                const q = query(
-                    mensajesRef,
-                    where("uid", "==", user.uid),
-                    orderBy("timestamp", "desc")
-                );
 
-                const querySnapshot = await getDocs(q);
-                const mensajesData = querySnapshot.docs.map((doc) => ({
+            const q = query(
+                mensajesRef,
+                where("uid", "==", user.uid)
+            );
+
+            const querySnapshot = await getDocs(q);
+
+            const mensajesData = querySnapshot.docs
+                .map((doc) => ({
                     id: doc.id,
                     ...doc.data(),
-                }));
+                }))
+                .sort((a, b) => b.timestamp?.seconds - a.timestamp?.seconds); // ordena descendente
 
-                setMensajes(mensajesData);
+            setMensajes(mensajesData);
+
             } catch (error) {
                 console.error("Error al obtener mensajes:", error);
             } finally {
                 setLoading(false);
             }
-        };
+        });
 
-        fetchMensajes();
+        return () => unsubscribe();
     }, []);
 
     return (
@@ -58,9 +64,10 @@ const NotificacionPaciente = () => {
                         <Card.Body>
                             <Card.Title>Recomendación médica</Card.Title>
                             <Card.Text>{msg.mensaje}</Card.Text>
+                            <hr />
                             <small className="text-muted">
-                                Enviado el{" "}
-                                {msg.timestamp?.toDate().toLocaleString("es-ES", {
+                                Enviado por <strong>{msg.nombre || "Desconocido"}</strong> ({msg.correo || "sin correo"})<br />
+                                el {msg.timestamp?.toDate().toLocaleString("es-ES", {
                                     dateStyle: "short",
                                     timeStyle: "short",
                                 })}

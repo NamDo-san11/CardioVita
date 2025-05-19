@@ -46,6 +46,7 @@ const AlertasDeRiesgo = () => {
                             : "N/D";
 
                         return {
+                            uid: user.uid, //Este permite que se pueda enviar mensajes con EnviarMensaje.jsx
                             nombre: user.nombre || "Desconocido",
                             correo: user.correo || "Sin correo",
                             edad: user.edad || "N/D",

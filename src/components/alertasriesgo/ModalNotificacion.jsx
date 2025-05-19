@@ -1,31 +1,54 @@
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { db } from "../../database/firebaseconfig";
-import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { collection, addDoc, Timestamp, query, where, getDocs } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import MensajeEnviado from "./MensajeEnviado"; // Asegúrate que la ruta sea correcta
 
 const ModalNotificacion = ({ show, onClose, pacientesEnRiesgo }) => {
     const [showMensajeModal, setShowMensajeModal] = useState(false);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [mensaje, setMensaje] = useState("");
     const [pacienteSeleccionado, setPacienteSeleccionado] = useState(null);
+    const [exitoEnvio, setExitoEnvio] = useState(true); // Nuevo estado para éxito/error
 
     const handleEnviarMensaje = async () => {
         if (!mensaje.trim() || !pacienteSeleccionado) return;
 
         try {
+            const auth = getAuth();
+            const doctor = auth.currentUser;
+
+            const usuariosRef = collection(db, "usuarios");
+            const q = query(usuariosRef, where("uid", "==", doctor.uid));
+            const querySnapshot = await getDocs(q);
+
+            let nombreDoctor = "Profesional de salud desconocido";
+            let correoDoctor = doctor.email || "sin correo";
+
+            if (!querySnapshot.empty) {
+                const docData = querySnapshot.docs[0].data();
+                nombreDoctor = docData.nombre || nombreDoctor;
+                correoDoctor = docData.correo || correoDoctor;
+            }
+
             await addDoc(collection(db, "mensajes_riesgo"), {
                 uid: pacienteSeleccionado.uid,
-                nombre: pacienteSeleccionado.nombre,
-                correo: pacienteSeleccionado.correo,
+                nombre: nombreDoctor,
+                correo: correoDoctor,
                 mensaje,
-                timestamp: Timestamp.now()
+                timestamp: Timestamp.now(),
             });
 
             setMensaje("");
             setShowMensajeModal(false);
-            alert("Mensaje enviado correctamente.");
+            setExitoEnvio(true);
+            setShowConfirmModal(true);
         } catch (error) {
             console.error("Error al enviar mensaje:", error);
-            alert("Hubo un error al enviar el mensaje.");
+            setExitoEnvio(false);
+            setShowMensajeModal(false);
+            setShowConfirmModal(true);
         }
     };
 
@@ -36,6 +59,7 @@ const ModalNotificacion = ({ show, onClose, pacientesEnRiesgo }) => {
 
     return (
         <>
+            {/* Modal principal */}
             <Modal show={show} onHide={onClose} centered>
                 <Modal.Header closeButton className="bg-danger text-white">
                     <Modal.Title>⚠️ Alerta de Riesgo</Modal.Title>
@@ -60,13 +84,13 @@ const ModalNotificacion = ({ show, onClose, pacientesEnRiesgo }) => {
                     <p className="text-danger">Por favor, tome acción inmediata si es necesario.</p>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={onClose}>
+                    <Button variant="outline-secondary" onClick={onClose}>
                         Cerrar
                     </Button>
                 </Modal.Footer>
             </Modal>
 
-            {/* Modal interno para enviar mensaje */}
+            {/* Modal para redactar y enviar mensaje */}
             <Modal
                 show={showMensajeModal}
                 onHide={() => setShowMensajeModal(false)}
@@ -90,14 +114,21 @@ const ModalNotificacion = ({ show, onClose, pacientesEnRiesgo }) => {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowMensajeModal(false)}>
+                    <Button variant="outline-secondary" onClick={() => setShowMensajeModal(false)}>
                         Cancelar
                     </Button>
-                    <Button variant="primary" onClick={handleEnviarMensaje}>
+                    <Button variant="outline-success" onClick={handleEnviarMensaje}>
                         Enviar
                     </Button>
                 </Modal.Footer>
             </Modal>
+
+            {/* Modal de confirmación o error */}
+            <MensajeEnviado
+                show={showConfirmModal}
+                onClose={() => setShowConfirmModal(false)}
+                exito={exitoEnvio}
+            />
         </>
     );
 };

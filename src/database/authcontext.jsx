@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const handleOnline = () => {
         console.log("¡Conexión restablecida!");
-        // Opcional: Mostrar una notificación más amigable (puedes usar un componente de notificación en lugar de alert)
+        // Opcional: Mostrar una notificación más amigable
         alert("¡Conexión restablecida!");
         };
         const handleOffline = () => {
