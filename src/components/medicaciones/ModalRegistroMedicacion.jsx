@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { getAuth } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore";
@@ -7,11 +7,24 @@ import { db } from "../../database/firebaseconfig";
 const ModalRegistroMedicacion = ({ show, onHide, onMedicacionAgregada }) => {
     const [nombre, setNombre] = useState("");
     const [hora, setHora] = useState("");
+    const [horaHH, setHoraHH] = useState("");
+    const [horaMM, setHoraMM] = useState("");
+    const [periodo, setPeriodo] = useState("AM");
     const [diasDuracion, setDiasDuracion] = useState(1);
     const [errores, setErrores] = useState({});
 
     const auth = getAuth();
     const uid = auth.currentUser?.uid;
+
+    useEffect(() => {
+        if (horaHH && horaMM) {
+            const h = String(horaHH).padStart(2, "0");
+            const m = String(horaMM).padStart(2, "0");
+            setHora(`${h}:${m} ${periodo}`);
+        } else {
+            setHora("");
+        }
+    }, [horaHH, horaMM, periodo]);
 
     const handleGuardar = async () => {
         const nuevosErrores = {};
@@ -25,15 +38,11 @@ const ModalRegistroMedicacion = ({ show, onHide, onMedicacionAgregada }) => {
         }
 
         const hoy = new Date();
-        const fechaInicio = hoy.getFullYear() + "-" + 
-            String(hoy.getMonth() + 1).padStart(2, "0") + "-" + 
-            String(hoy.getDate()).padStart(2, "0");
+        const fechaInicio = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, "0")}-${String(hoy.getDate()).padStart(2, "0")}`;
 
         const fechaFinDate = new Date(hoy);
         fechaFinDate.setDate(hoy.getDate() + parseInt(diasDuracion) - 1);
-        const fechaFin = fechaFinDate.getFullYear() + "-" + 
-            String(fechaFinDate.getMonth() + 1).padStart(2, "0") + "-" + 
-            String(fechaFinDate.getDate()).padStart(2, "0");
+        const fechaFin = `${fechaFinDate.getFullYear()}-${String(fechaFinDate.getMonth() + 1).padStart(2, "0")}-${String(fechaFinDate.getDate()).padStart(2, "0")}`;
 
         const nuevaMed = {
             uid,
@@ -50,8 +59,12 @@ const ModalRegistroMedicacion = ({ show, onHide, onMedicacionAgregada }) => {
             if (onMedicacionAgregada) {
                 onMedicacionAgregada({ ...nuevaMed, id: docRef.id });
             }
+
             setNombre("");
             setHora("");
+            setHoraHH("");
+            setHoraMM("");
+            setPeriodo("AM");
             setDiasDuracion(1);
             setErrores({});
             onHide();
@@ -82,75 +95,56 @@ const ModalRegistroMedicacion = ({ show, onHide, onMedicacionAgregada }) => {
                     </Form.Group>
 
                     <Form.Label>Hora de Toma</Form.Label>
-                        <div className="d-flex gap-2 align-items-center">
-                            {/* Hora (1-12) */}
-                            <Form.Control
+                    <div className="d-flex gap-2 align-items-center">
+                        <Form.Control
                             type="number"
                             min="1"
                             max="12"
-                            value={hora.split(":")[0] || ""}
+                            value={horaHH}
                             onChange={(e) => {
-                                const valor = e.target.value;
-                                let h = valor === "" ? "" : parseInt(valor);
-                                if (h !== "") {
-                                    if (isNaN(h) || h < 1) h = 1;
-                                    if (h > 12) h = 12;
-                                    h = String(h).padStart(2, "0");
+                                const val = e.target.value;
+                                if (val === "") return setHoraHH("");
+                                const parsed = parseInt(val);
+                                if (!isNaN(parsed) && parsed >= 1 && parsed <= 12) {
+                                    setHoraHH(parsed);
                                 }
-                                const m = hora.split(":")[1]?.split(" ")[0] || "00";
-                                const periodo = hora.split(" ")[1] || "AM";
-                                setHora(`${h}:${m} ${periodo}`);
                             }}
                             placeholder="HH"
                             isInvalid={!!errores.hora}
                             style={{ width: "80px" }}
                         />
-
-                            :
-
-                            {/* Minutos (0-59) */}
-                            <Form.Control
+                        :
+                        <Form.Control
                             type="number"
                             min="0"
                             max="59"
-                            value={hora.split(":")[1]?.split(" ")[0] || ""}
+                            value={horaMM}
                             onChange={(e) => {
-                                const valor = e.target.value;
-                                let m = valor === "" ? "" : parseInt(valor);
-                                if (m !== "") {
-                                    if (isNaN(m) || m < 0) m = 0;
-                                    if (m > 59) m = 59;
-                                    m = String(m).padStart(2, "0");
+                                const val = e.target.value;
+                                if (val === "") return setHoraMM("");
+                                const parsed = parseInt(val);
+                                if (!isNaN(parsed) && parsed >= 0 && parsed <= 59) {
+                                    setHoraMM(parsed);
                                 }
-                                const h = hora.split(":")[0] || "01";
-                                const periodo = hora.split(" ")[1] || "AM";
-                                setHora(`${String(h).padStart(2, "0")}:${m} ${periodo}`);
                             }}
                             placeholder="MM"
                             isInvalid={!!errores.hora}
                             style={{ width: "80px" }}
                         />
+                        <Form.Select
+                            value={periodo}
+                            onChange={(e) => setPeriodo(e.target.value)}
+                            style={{ width: "90px" }}
+                        >
+                            <option value="AM">AM</option>
+                            <option value="PM">PM</option>
+                        </Form.Select>
+                    </div>
+                    <Form.Control.Feedback type="invalid">
+                        {errores.hora}
+                    </Form.Control.Feedback>
 
-
-                            {/* Selector AM/PM */}
-                            <Form.Select
-                                value={hora.split(" ")[1] || "AM"}
-                                onChange={(e) => {
-                                    const h = hora.split(":")[0] || "01";
-                                    const m = hora.split(":")[1]?.split(" ")[0] || "00";
-                                    setHora(`${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")} ${e.target.value}`);
-                                }}
-                                style={{ width: "90px" }}
-                            >
-                                <option value="AM">AM</option>
-                                <option value="PM">PM</option>
-                            </Form.Select>
-                        </div>
-                        <Form.Control.Feedback type="invalid">
-                            {errores.hora}
-                        </Form.Control.Feedback>
-
-                    <Form.Group className="mb-3">
+                    <Form.Group className="mt-3">
                         <Form.Label>Días de duración</Form.Label>
                         <Form.Control
                             type="number"
