@@ -148,7 +148,7 @@ const SintomasView = () => {
         />
       ) : (
         <>
-          <Button variant="success" className="mb-3" onClick={() => {
+          <Button variant="outline-success" className="mb-3" onClick={() => {
             setDatosEditar(null);
             setMostrarCuestionario(true);
           }}>

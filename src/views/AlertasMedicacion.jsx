@@ -119,7 +119,7 @@ return (
         <div className="mb-3">
 
         <div className="mb-2">
-            <Button variant="outline-info" onClick={() => setShowModal(true)}>
+            <Button variant="outline-success" onClick={() => setShowModal(true)}>
             <FaPills className="me-2" />
             Agregar medicación
             </Button>

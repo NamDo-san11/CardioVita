@@ -23,7 +23,7 @@ const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => 
     return (
         <>
         <div className="mb-2">
-            <Button variant="info" onClick={() => setShowModal(true)}>
+            <Button variant="outline-info" onClick={() => setShowModal(true)}>
             <FaShareAlt /> Compartir Reporte
             </Button>
         </div>

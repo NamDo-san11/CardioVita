@@ -159,10 +159,10 @@ const PresionArterialView = () => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2 className="fw-bold text-edit">Presión Arterial</h2>
         <div className="d-flex gap-2">
-          <Button variant="info" onClick={() => setMostrarModalCompartir(true)}>
+          <Button variant="outline-info" onClick={() => setMostrarModalCompartir(true)}>
             <FaShareAlt /> Compartir Reporte
           </Button>
-          <Button variant="success" onClick={() => {
+          <Button variant="outline-success" onClick={() => {
             setDatosEditar(null);
             setMostrarModal(true);
           }}>
