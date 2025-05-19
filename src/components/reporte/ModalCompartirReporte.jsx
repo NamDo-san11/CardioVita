@@ -69,14 +69,14 @@ const ModalCompartirReporte = ({ show, onClose, medicaciones }) => {
             <div className="d-flex justify-content-around mt-3">
 
             <div className="text-center">
-                <Button variant="primary" onClick={guardarPDF} className="d-flex flex-column align-items-center">
+                <Button variant="outline-info" onClick={guardarPDF} className="d-flex flex-column align-items-center">
                 <FaDownload size={24} />
                 <div className="mt-1">Guardar</div>
                 </Button>
             </div>
 
             <div className="text-center">
-                <Button variant="success" onClick={compartirPDF} className="d-flex flex-column align-items-center">
+                <Button variant="outline-success" onClick={compartirPDF} className="d-flex flex-column align-items-center">
                 <FaShareAlt size={24} />
                 <div className="mt-1">Compartir</div>
                 </Button>

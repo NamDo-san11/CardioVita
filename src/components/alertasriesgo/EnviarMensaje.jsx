@@ -121,7 +121,7 @@ import {
         </Modal.Body>
 
         <Modal.Footer>
-            <Button variant="secondary" onClick={onClose} disabled={enviando}>
+            <Button variant="outline-secondary" onClick={onClose} disabled={enviando}>
             Cancelar
             </Button>
             <Button

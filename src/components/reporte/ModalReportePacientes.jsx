@@ -66,12 +66,12 @@ const ModalReportePacientes = ({ show, onClose, pacientes }) => {
         <p>¿Qué deseas hacer con el reporte de pacientes?</p>
         <div className="d-flex justify-content-around mt-4">
           <div className="text-center">
-            <Button variant="primary" onClick={guardarPDF}>
+            <Button variant="outline-info" onClick={guardarPDF}>
               <FaDownload size={24} /> <div className="mt-1">Guardar</div>
             </Button>
           </div>
           <div className="text-center">
-            <Button variant="success" onClick={compartirPDF}>
+            <Button variant="outline-success" onClick={compartirPDF}>
               <FaShareAlt size={24} /> <div className="mt-1">Compartir</div>
             </Button>
           </div>

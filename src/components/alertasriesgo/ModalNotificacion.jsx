@@ -79,7 +79,7 @@ const ModalNotificacion = ({ show, onClose, pacientesEnRiesgo }) => {
             <p className="text-danger">Por favor, tome acción inmediata si es necesario.</p>
             </Modal.Body>
             <Modal.Footer>
-            <Button variant="secondary" onClick={onClose}>
+            <Button variant="outline-secondary" onClick={onClose}>
                 Cerrar
             </Button>
             </Modal.Footer>
@@ -109,10 +109,10 @@ const ModalNotificacion = ({ show, onClose, pacientesEnRiesgo }) => {
             </Form>
             </Modal.Body>
             <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowMensajeModal(false)}>
+            <Button variant="outline-secondary" onClick={() => setShowMensajeModal(false)}>
                 Cancelar
             </Button>
-            <Button variant="primary" onClick={handleEnviarMensaje}>
+            <Button variant="outline-success" onClick={handleEnviarMensaje}>
                 Enviar
             </Button>
             </Modal.Footer>
