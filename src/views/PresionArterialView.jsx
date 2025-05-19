@@ -5,11 +5,12 @@ import TarjetaInformativa from "../components/presion/TarjetaInformativa";
 import ModalPresion from "../components/presion/ModalPresion";
 import ModalCompartirReportePrecion from "../components/reporte/ModalCompartirReportePrecion";
 import ListadoPresiones from "../components/presion/ListadoPresiones";
-import { db, auth } from "../database/firebaseconfig";
+import { db, auth, } from "../database/firebaseconfig";
 import ReactGA from "react-ga4";
-import { collection, onSnapshot, addDoc, setDoc, doc, deleteDoc, serverTimestamp } from "firebase/firestore";
+import { collection, onSnapshot, addDoc, setDoc, getDoc, doc,  deleteDoc, serverTimestamp } from "firebase/firestore";
 import { FaShareAlt } from "react-icons/fa";
 import "../styles/PresionArterial.css";
+
 
 const PresionArterialView = () => {
   const [mostrarModal, setMostrarModal] = useState(false);
@@ -18,6 +19,7 @@ const PresionArterialView = () => {
   const [ultimaPresion, setUltimaPresion] = useState(null);
   const [resumenPresion, setResumenPresion] = useState(null);
   const [registros, setRegistros] = useState([]);
+  const [edadUsuario, setEdadUsuario] = useState(null); 
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [filtro, setFiltro] = useState("todo");
 
@@ -40,6 +42,26 @@ const PresionArterialView = () => {
       title: "PresionArterialView.jsx",
     });
   }, []);
+
+  useEffect(() => {
+  const obtenerEdad = async () => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    try {
+      const docSnap = await getDoc(doc(db, "usuarios", user.uid));
+      if (docSnap.exists()) {
+        const datos = docSnap.data();
+        setEdadUsuario(datos.edad); // Asume que el campo es "edad"
+      }
+    } catch (error) {
+      console.error("Error obteniendo edad:", error);
+    }
+  };
+
+  obtenerEdad();
+}, []);
+
 
   useEffect(() => {
     const user = auth.currentUser;
@@ -173,7 +195,7 @@ const PresionArterialView = () => {
 
       <Row>
         <Col md={12} className="mb-3">
-          <TarjetaNormativa registros={registros} resumen={resumenPresion} />
+<TarjetaNormativa registros={registros} resumen={resumenPresion} edad={edadUsuario} />
         </Col>
         <Col md={12} className="mb-4">
           <TarjetaInformativa />
