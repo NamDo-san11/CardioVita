@@ -8,9 +8,12 @@ const ModalPresion = ({ show, onHide, onGuardar }) => {
   const [diastolica, setDiastolica] = useState(80);
 
   const calcularRango = () => {
+    if (sistolica < 90 || diastolica < 60) return "Baja";
     if (sistolica < 120 && diastolica < 80) return "Normal";
-    if (sistolica <= 129 && diastolica < 80) return "Elevada";
-    return "Alta";
+    if (sistolica >= 120 && sistolica <= 129 && diastolica < 80) return "Elevada";
+    if ((sistolica >= 130 && sistolica <= 139) || (diastolica >= 80 && diastolica <= 89)) return "Alta (Etapa 1)";
+    if (sistolica >= 140 || diastolica >= 90) return "Alta (Etapa 2)";
+    return "Indefinido";
   };
 
   const handleSubmit = () => {
@@ -53,7 +56,14 @@ const ModalPresion = ({ show, onHide, onGuardar }) => {
           </Row>
 
           <div className="text-end">
-            <span className="badge bg-info">Tu Rango: {calcularRango()}</span>
+            <span className={`badge ${
+              calcularRango().includes("Baja") ? "bg-primary" :
+              calcularRango().includes("Normal") ? "bg-success" :
+              calcularRango().includes("Elevada") ? "bg-warning text-dark" :
+              "bg-danger"
+            }`}>
+              Tu Rango: {calcularRango()}
+          </span>
           </div>
         </Form>
       </Modal.Body>

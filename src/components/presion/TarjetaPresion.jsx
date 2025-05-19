@@ -6,6 +6,7 @@ const TarjetaPresion = ({ data, onEdit, onDelete }) => {
 
   const obtenerColor = (rango) => {
     switch (rango) {
+      case "Baja": return "info"
       case "Normal": return "success";
       case "Elevada": return "warning";
       case "Alta": return "danger";

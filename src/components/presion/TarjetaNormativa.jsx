@@ -17,6 +17,7 @@ const TarjetaNormativa = ({ registros, resumen, edad }) => {
   const diastolicaPromedio = Math.round(promedio.diastolica / total);
 
   const obtenerColor = (valor) => {
+    if (valor < 90) return "info"
     if (valor < 120) return "success";
     if (valor <= 129) return "warning";
     return "danger";
