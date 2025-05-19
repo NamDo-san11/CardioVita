@@ -24,7 +24,8 @@ const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => 
         <>
         <div className="mb-2">
             <Button variant="outline-info" onClick={() => setShowModal(true)}>
-            <FaShareAlt /> Compartir Reporte
+            <FaShareAlt className="me-2" />
+            Compartir Reporte
             </Button>
         </div>
 
@@ -46,13 +47,13 @@ const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => 
             <tbody>
                 {medicaciones.map((med) => (
                 <tr key={med.id}>
-                    <td>{med.nombre}</td>
-                    <td>{med.hora}</td>
-                    <td>{med.tomado ? "Sí" : "No"}</td>
-                    <td>{med.pospuesto ? "Sí" : "No"}</td>
-                    <td>{med.fechaInicio}</td>
-                    <td>{med.fechaFin}</td>
-                    <td>
+                    <td data-label="Nombre">{med.nombre}</td>
+                    <td data-label="Hora">{med.hora}</td>
+                    <td data-label="Tomado">{med.tomado ? "Sí" : "No"}</td>
+                    <td data-label="Pospuesto">{med.pospuesto ? "Sí" : "No"}</td>
+                    <td data-label="Inicio">{med.fechaInicio}</td>
+                    <td data-label="Fin">{med.fechaFin}</td>
+                    <td data-label="Acciones">
                     <div className="d-flex flex-wrap gap-2">
                         <Button
                         variant="outline-secondary"
