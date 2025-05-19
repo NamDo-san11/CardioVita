@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 import { FaShareAlt } from "react-icons/fa";
-import { PencilSquare, Trash, } from "react-bootstrap-icons";
+import { PencilSquare, Trash } from "react-bootstrap-icons";
 import ModalCompartirReporte from "../reporte/ModalCompartirReporte";
 
 const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => {
@@ -22,14 +22,16 @@ const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => 
 
     return (
         <>
-        <div style={{ overflowX: "auto", maxWidth: "100%", fontSize }}>
-            <div className="mb-2">
+        <div className="mb-2">
             <Button variant="info" onClick={() => setShowModal(true)}>
-                <FaShareAlt /> Compartir Reporte
+            <FaShareAlt /> Compartir Reporte
             </Button>
-            </div>
+        </div>
 
-            <table className="table table-striped table-bordered table-hover table-sm mb-0">
+        {medicaciones.length === 0 ? (
+            <p className="text-muted">No hay medicaciones registradas.</p>
+        ) : (
+            <Table striped bordered hover responsive className="bg-white" style={{ fontSize }}>
             <thead>
                 <tr>
                 <th>Nombre</th>
@@ -42,13 +44,8 @@ const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => 
                 </tr>
             </thead>
             <tbody>
-                {medicaciones.length === 0 ? (
-                <tr>
-                    <td colSpan="7" className="text-center">No hay medicaciones registradas.</td>
-                </tr>
-                ) : (
-                medicaciones.map((med) => (
-                    <tr key={med.id}>
+                {medicaciones.map((med) => (
+                <tr key={med.id}>
                     <td>{med.nombre}</td>
                     <td>{med.hora}</td>
                     <td>{med.tomado ? "Sí" : "No"}</td>
@@ -56,34 +53,31 @@ const TablaMedicaciones = ({ medicaciones, openEditModal, openDeleteModal }) => 
                     <td>{med.fechaInicio}</td>
                     <td>{med.fechaFin}</td>
                     <td>
-                        <div className="d-flex flex-wrap gap-2">
+                    <div className="d-flex flex-wrap gap-2">
                         <Button
-                            variant="outline-secondary"
-                            size="sm"
-                            className="me-2"
-                            onClick={() => openEditModal(med)}
-                            title="Editar"
+                        variant="outline-secondary"
+                        size="sm"
+                        className="me-2"
+                        onClick={() => openEditModal(med)}
+                        title="Editar"
                         >
-                            <PencilSquare size={16} />
+                        <PencilSquare size={16} />
                         </Button>
-
                         <Button
-                            variant="outline-danger"
-                            size="sm"
-                            onClick={() => openDeleteModal(med)}
-                            title="Eliminar"
+                        variant="outline-danger"
+                        size="sm"
+                        onClick={() => openDeleteModal(med)}
+                        title="Eliminar"
                         >
-                            <Trash size={16} />
+                        <Trash size={16} />
                         </Button>
-
-                        </div>
+                    </div>
                     </td>
-                    </tr>
-                ))
-                )}
+                </tr>
+                ))}
             </tbody>
-            </table>
-        </div>
+            </Table>
+        )}
 
         <ModalCompartirReporte
             show={showModal}
