@@ -14,6 +14,8 @@ import VerPerfilView from "./views/VerPerfilView";
 import VerConsultasDoctorView from "./views/VerConsultasDoctorView";
 import EnviarConsultaView from "./views/EnviarConsultaView";
 import ListaPacientesView from "./views/ListaPacientesView";
+import DoctorEstadoView from "./views/DoctorEstadoView";
+import ListaDoctoresDisponiblesView from "./views/ListaDoctoresDisponiblesView";
 import AlertasDeRiesgo from "./views/AlertasDeRiesgo";
 import NotificacionPaciente from "../src/components/alertasriesgo/NotificacionPaciente";
 import ReactGA from "react-ga4";
@@ -43,6 +45,8 @@ function App() {
               <Route path="/inicio" element={<ProtectedRoute element={<Inicio />} />} />
               <Route path="/chat" element={<ProtectedRoute element={<EnviarConsultaView />} />} />
               <Route path="/pacientes" element={<ProtectedRoute element={<ListaPacientesView />} />} />
+              <Route path="/docestado" element={<ProtectedRoute element={<DoctorEstadoView />} />} />
+              <Route path="/listdoc" element={<ProtectedRoute element={<ListaDoctoresDisponiblesView />} />} />
               <Route path="/chadoct" element={<ProtectedRoute element={<VerConsultasDoctorView />} />} />
               <Route path="/verperfil" element={<ProtectedRoute element={<VerPerfilView />} />} />
               <Route path="/sintomas" element={<ProtectedRoute element={<SintomasView />} />} />

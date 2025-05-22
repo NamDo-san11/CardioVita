@@ -107,6 +107,14 @@ const Encabezado = () => {
                   </Nav.Link>
 
                   <Nav.Link
+                    onClick={() => handleNavigate("/listdoc")}
+                    className={isCollapsed ? "color-texto-marca" : "text-white"}
+                  >
+                    {isCollapsed && <i className="bi bi-thermometer-half me-2"></i>}
+                    <strong>Doctores</strong>
+                  </Nav.Link>
+
+                  <Nav.Link
                     onClick={() => handleNavigate("/presion")}
                     className={isCollapsed ? "color-texto-marca" : "text-white"}
                   >
@@ -148,6 +156,14 @@ const Encabezado = () => {
                   >
                     {isCollapsed && <i className="bi bi-chat-left-text me-2"></i>}
                     <strong>Consultas</strong>
+                  </Nav.Link>
+
+                  <Nav.Link
+                    onClick={() => handleNavigate("/docestado")}
+                    className={isCollapsed ? "color-texto-marca" : "text-white"}
+                  >
+                    {isCollapsed && <i className="bi bi-thermometer-half me-2"></i>}
+                    <strong>estados</strong>
                   </Nav.Link>
 
                   <Nav.Link
