@@ -63,24 +63,23 @@ const DoctorEstadoView = () => {
 
   // Escuchar solicitudes en tiempo real
   useEffect(() => {
-    if (!uid) return;
+  const q = query(
+    collection(db, "teleconsultas"),
+    where("idDoctor", "==", uid),
+    where("estado", "in", ["pendiente", "activa"]) // incluir activas
+  );
 
-    const q = query(
-      collection(db, "teleconsultas"),
-      where("idDoctor", "==", uid),
-      where("estado", "==", "pendiente")
-    );
+  const unsub = onSnapshot(q, (snapshot) => {
+    const lista = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    setSolicitudes(lista);
+  });
 
-    const unsub = onSnapshot(q, (snapshot) => {
-      const lista = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setSolicitudes(lista);
-    });
+  return () => unsub();
+}, [uid]);
 
-    return () => unsub();
-  }, [uid]);
 
   const guardarPerfil = async ({ nombre, especialidad }) => {
     try {
@@ -121,17 +120,32 @@ const DoctorEstadoView = () => {
     }
   };
 
-  const aceptarConsulta = async (solicitud) => {
-    try {
-      await updateDoc(doc(db, "doctor", solicitud.id), {
-        estado: "activa",
-        // salaVideo: "https://tusala.com/..." (opcional más adelante)
-      });
-      alert("Consulta aceptada. Puedes iniciar la videollamada.");
-    } catch (error) {
-      console.error("Error al aceptar consulta:", error);
-    }
-  };
+const aceptarConsulta = async (solicitud) => {
+  try {
+    const roomId = `sala-${solicitud.id}`; // nombre único
+    const link = `https://meet.jit.si/${roomId}`;
+
+    await updateDoc(doc(db, "teleconsultas", solicitud.id), {
+      estado: "activa",
+      salaVideo: link,
+    });
+
+    alert("Consulta aceptada. Videollamada lista.");
+  } catch (error) {
+    console.error("Error al aceptar consulta:", error);
+  }
+};
+
+const finalizarConsulta = async (solicitud) => {
+  try {
+    await updateDoc(doc(db, "teleconsultas", solicitud.id), {
+      estado: "finalizada",
+    });
+    alert("Consulta finalizada correctamente.");
+  } catch (error) {
+    console.error("Error al finalizar consulta:", error);
+  }
+};
 
   if (loading) {
     return (
@@ -168,7 +182,11 @@ const DoctorEstadoView = () => {
             <Row className="justify-content-center">
               {solicitudes.map((s) => (
                 <Col md={6} lg={5} key={s.id}>
-                  <SolicitudCard solicitud={s} onAceptar={aceptarConsulta} />
+                 <SolicitudCard
+                  solicitud={s}
+                  onAceptar={aceptarConsulta}
+                  onFinalizar={finalizarConsulta}
+                />
                 </Col>
               ))}
             </Row>

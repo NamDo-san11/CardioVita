@@ -107,10 +107,18 @@ const Encabezado = () => {
                   </Nav.Link>
 
                   <Nav.Link
+                    onClick={() => handleNavigate("/consultas")}
+                    className={isCollapsed ? "color-texto-marca" : "text-white"}
+                  >
+                    {isCollapsed && <i className="bi bi-calendar-fill me-2"></i>}
+                    <strong>Mis Consultas</strong>
+                  </Nav.Link>
+
+                  <Nav.Link
                     onClick={() => handleNavigate("/listdoc")}
                     className={isCollapsed ? "color-texto-marca" : "text-white"}
                   >
-                    {isCollapsed && <i className="bi bi-thermometer-half me-2"></i>}
+                    {isCollapsed && <i className="bi bi-file-person-fill me-2"></i>}
                     <strong>Doctores</strong>
                   </Nav.Link>
 
@@ -134,7 +142,7 @@ const Encabezado = () => {
                     onClick={() => handleNavigate("/alertasmedicacion")}
                     className={isCollapsed ? "color-texto-marca" : "text-white"}
                   >
-                    {isCollapsed && <i className="bi bi-capsule me-2"></i>}
+                    {isCollapsed && <i className="bi bi-exclamation-triangle-fill me-2"></i>}
                     <strong>Alertas</strong>
                   </Nav.Link>
 
@@ -162,8 +170,8 @@ const Encabezado = () => {
                     onClick={() => handleNavigate("/docestado")}
                     className={isCollapsed ? "color-texto-marca" : "text-white"}
                   >
-                    {isCollapsed && <i className="bi bi-thermometer-half me-2"></i>}
-                    <strong>estados</strong>
+                    {isCollapsed && <i className="bi bi-file-earmark-person-fill me-2"></i>}
+                    <strong>Estado</strong>
                   </Nav.Link>
 
                   <Nav.Link
@@ -178,7 +186,7 @@ const Encabezado = () => {
                     onClick={() => handleNavigate("/alertasderiesgo")}
                     className={isCollapsed ? "color-texto-marca" : "text-white"}
                   >
-                    {isCollapsed && <i className="bi bi-people me-2"></i>}
+                    {isCollapsed && <i className="bi bi-exclamation-triangle-fill me-2"></i>}
                     <strong>Alertas de Riesgo</strong>
                   </Nav.Link>
                 </>
