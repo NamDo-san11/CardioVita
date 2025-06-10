@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'aos/dist/aos.css'
 import App from './App.jsx'
 import AOS from 'aos'
+import '../src/i18n.js';
 
 // todoIniciar AOS al arrancar la app
 AOS.init({ duration: 1000, once: true })

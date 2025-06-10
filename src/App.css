@@ -294,7 +294,7 @@ df-messenger {
 }
 
 
-/* Mobile ajustes adicionales */
+
 @media (max-width: 576px) {
   df-messenger {
     --df-messenger-button-bottom: 120px;
@@ -307,4 +307,18 @@ df-messenger {
 
 header, .navbar {
   z-index: 999;
+}
+
+.navbar .nav-link.dropdown-toggle {
+  color: white !important;
+}
+
+
+.offcanvas .nav-link {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
