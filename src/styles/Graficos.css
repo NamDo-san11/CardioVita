@@ -1,0 +1,59 @@
+.grafico-card {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  margin-bottom: 40px;
+  width: 100%;
+  max-width: 850px; /* más pequeño para escritorio */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.filtros-grafico {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filtros-grafico button {
+  padding: 8px 16px;
+  background-color: #f0f0f0;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  transition: all 0.2s ease-in-out;
+}
+
+.filtros-grafico button:hover {
+  background-color: #e0e0e0;
+}
+
+.filtros-grafico button.activo {
+  background-color: #f39c12;
+  color: white;
+  border-color: #e67e22;
+}
+
+/* 📱 Responsive para móviles */
+@media (max-width: 768px) {
+  .grafico-card {
+    padding: 16px;
+    max-width: 100%;
+  }
+
+  .filtros-grafico {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .filtros-grafico button {
+    width: 100%;
+    max-width: 240px;
+  }
+}

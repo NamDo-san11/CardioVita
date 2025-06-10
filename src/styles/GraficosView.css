@@ -1,0 +1,16 @@
+.graficos-view {
+  padding: 40px 20px;
+  background-color: #ffffff; /* Fondo blanco */
+  min-height: 100vh;
+  font-family: 'Arapey', serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.graficos-view h2 {
+  color: #0A111C;
+  font-size: 32px;
+  margin-bottom: 24px;
+  font-weight: bold;
+}

@@ -5,6 +5,8 @@ import { Spinner } from "react-bootstrap";
 import PacienteTable from "../components/pacientes/PacienteTable";
 import ModalReportePacientes from "../components/reporte/ModalReportePacientes";
 import { Button } from "react-bootstrap";
+import GraficoEdadPacientes from "../components/graficos/GraficoEdadPacientes";
+
 
 
 const ListaPacientesView = () => {
@@ -44,6 +46,8 @@ const ListaPacientesView = () => {
     obtenerPacientes();
   }, []);
 
+
+
 return (
   <div className="container mt-4">
     <h2 className="text-black mb-4">Lista de Pacientes</h2>
@@ -52,14 +56,19 @@ return (
       <Spinner animation="border" variant="light" />
     ) : (
       <>
+        <GraficoEdadPacientes pacientes={pacientes} />
+        
+      
+        <PacienteTable pacientes={pacientes} filtro={filtro} setFiltro={setFiltro} />
         <div className="d-flex justify-content-between align-items-center mb-3">
 
           <Button variant="outline-info" onClick={() => setShowModal(true)}>
             Generar Reporte PDF
           </Button>
         </div>
+     
 
-        <PacienteTable pacientes={pacientes} filtro={filtro} setFiltro={setFiltro} />
+        
       </>
     )}
 

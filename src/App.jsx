@@ -22,6 +22,7 @@ import NotificacionPaciente from "../src/components/alertasriesgo/NotificacionPa
 import ReactGA from "react-ga4";
 import './App.css';
 import { useEffect } from "react";
+import GraficosView from "./views/GraficosView";
 
 function App() {
 
@@ -58,6 +59,7 @@ function App() {
               <Route path="/educacion" element={<ProtectedRoute element={<EducacionView />} />} />
               <Route path="/alertasderiesgo" element={<ProtectedRoute element={<AlertasDeRiesgo />} />} />
               <Route path="/notificacionpaciente" element={<ProtectedRoute element={<NotificacionPaciente />} />} />
+              <Route path="/graficos" element={<ProtectedRoute element={<GraficosView/>} />} />
             </Routes>
           </main>
         </Router>
