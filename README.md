@@ -39,12 +39,14 @@ Educar al usuario sobre la salud cardíaca y fomentar el autocuidado.
 
 🔬 Proyecto universitario realizado como parte del sistema de monitoreo de salud en tiempo real.
 
+---
+
 ## ⚙️ Instalación
 
 bash
 Copiar
 Editar
-- Visitanos en - 🧪 [**Nuestra Web**](https://github.com/Rocsanmenz)
+- Visitanos en [**Nuestra Web**](https://github.com/Rocsanmenz)
 # Clona el repositorio
 git clone https://github.com/tuusuario/cardiovita.git
 cd cardiovita
@@ -56,6 +58,8 @@ npm install
 npm run dev
 Si aparecen errores, usar: npm install --force
 
+ ---
+ 
 ## 🎖️ Agradecimientos especiales
 
 - 🎮 [Oneyker Galeano](https://github.com/Oneyker21)
