@@ -15,6 +15,9 @@ Educar al usuario sobre la salud cardíaca y fomentar el autocuidado.
 ## 🧠 Tecnologías utilizadas
 
 <div align="center"> <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" /> <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" /> <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" /> <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" /> <img src="https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white" /> <img src="https://img.shields.io/badge/Google%20Analytics-E37400?style=for-the-badge&logo=googleanalytics&logoColor=white" /> </div>
+
+ ---
+
 ##  🛠 Funcionalidades principales
 📈 Registro y gestión de mediciones de presión arterial.
 
@@ -41,6 +44,7 @@ Educar al usuario sobre la salud cardíaca y fomentar el autocuidado.
 bash
 Copiar
 Editar
+- Visitanos en - 🧪 [**Nuestra Web**](https://github.com/Rocsanmenz)
 # Clona el repositorio
 git clone https://github.com/tuusuario/cardiovita.git
 cd cardiovita
