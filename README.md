@@ -65,12 +65,13 @@ Si aparecen errores, usar: npm install --force
 - 🔍 [Jonathán Moreno](https://github.com/jonathanquehay)
 - 🐁 [César Vargas](https://github.com/Crisvargasmz)
 - 💊 [Elieth Umaña](https://github.com/jonathanquehay)
-- 🧭 [María Ríos](https://github.com/mariajorlenis)
+- 🧭 [Maria Jorlenis](https://github.com/mariajorlenis)
 - 🥶 [Daniela Baltodano](https://github.com/DanielaBaltodano)
 - 👾 [Yamil Garcia](https://github.com/Yamilgarcia) 
 - 🎓 [Kenny Antonio Téllez](https://github.com/Atkenny)
 - 🚀 [Gisela Cruz](https://github.com/Gisela3876)
 - 🎮 [Oneyker Galeano](https://github.com/Oneyker21)
+- 🐭 [Joyssi Cruz](https://github.com/Joyssi)
 - 🐈‍⬛ [Eliab Javier Selva Cruz](https://github.com/eliabjselvacruz)
 
   
