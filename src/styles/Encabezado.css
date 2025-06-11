@@ -1,0 +1,61 @@
+/* Encabezado.css */
+
+.nav-hover {
+  transition: all 0.2s ease-in-out;
+}
+
+.nav-hover:hover {
+  text-shadow: 0 0 6px #ffffff;
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+/* Fondo con degradado para el navbar */
+.navbar.bg-primary {
+  background: linear-gradient(90deg, #26425A, #0A111C);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Fondo para el offcanvas */
+.offcanvas.offcanvas-end {
+  background: linear-gradient(180deg, #26425A, #0A111C);
+  color: #ffffff;
+}
+
+/* Aumentar visibilidad de ítems en offcanvas */
+.offcanvas .nav-link,
+.offcanvas .dropdown-item {
+  font-size: 1.1rem;
+  color: #ffffff;
+}
+
+.offcanvas .nav-link:hover,
+.offcanvas .dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+}
+
+/* Estilo para ítems del dropdown del navbar */
+.dropdown-menu {
+  background-color: #003366;
+}
+
+.dropdown-item {
+  color: #ffffff;
+  transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: #0055aa;
+}
+
+/* Estilo para ícono animado en el logo (opcional) */
+.navbar-brand img:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Añadir algo de padding inferior para evitar que el navbar tape el contenido */
+body {
+  padding-top: 70px;
+}

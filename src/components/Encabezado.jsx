@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Container, Nav, Navbar, Offcanvas, NavDropdown } from "react-bootstrap";
+import { Container, Nav, Navbar, NavDropdown, Offcanvas } from "react-bootstrap";
 import logo from "../assets/logo.png";
 import { useAuth } from "../database/authcontext";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../database/firebaseconfig";
-import 'bootstrap-icons/font/bootstrap-icons.css';
+import "bootstrap-icons/font/bootstrap-icons.css";
 import "../App.css";
 import { useTranslation } from "react-i18next";
 
+import "../styles/Encabezado.css"; // Asegúrate de tener este archivo CSS en tu proyecto
+
 const Encabezado = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const [rolUsuario, setRolUsuario] = useState(null);
   const { user, isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { t, i18n } = useTranslation();
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     const obtenerRol = async () => {
@@ -31,7 +33,6 @@ const Encabezado = () => {
   }, [user]);
 
   const handleLogout = async () => {
-    setIsCollapsed(false);
     localStorage.removeItem("adminEmail");
     localStorage.removeItem("adminPassword");
     await logout();
@@ -40,144 +41,125 @@ const Encabezado = () => {
 
   const handleNavigate = (path) => {
     navigate(path);
-    setIsCollapsed(false);
+    setShow(false);
   };
 
   const cambiarIdioma = (lng) => i18n.changeLanguage(lng);
 
-  const ocultar = location.pathname === "/" || location.pathname === "/registro";
+  const ocultar = ["/", "/registro"].includes(location.pathname);
   if (ocultar) return null;
 
+  const menuKeys = [
+    "inicio",
+    "educacion",
+    "sintomas",
+    "consultas",
+    "doctores",
+    "presion",
+    "estadisticas",
+    "chat",
+    "alertas",
+    "notificacion",
+    "estado",
+    "pacientes",
+    "riesgo",
+    "cerrarSesion",
+    "idioma"
+  ];
+
   return (
-    <Navbar expand="sm" fixed="top" className="color-navbar">
-      <Container>
-        <Navbar.Brand
-          onClick={() => handleNavigate("/inicio")}
-          className="text-white"
-          style={{ cursor: "pointer" }}
-        >
-          <img
-            alt=""
-            src={logo}
-            width="40"
-            height="40"
-            className="d-inline-block align-top"
-          />{" "}
+    <Navbar expand="lg" className="bg-primary navbar-dark px-3 py-4" fixed="top">
+      <Container fluid>
+        <Navbar.Brand onClick={() => handleNavigate("/inicio")} className="d-flex align-items-center nav-hover fs-5" style={{ cursor: "pointer" }}>
+          <img src={logo} alt="logo" width="30" height="30" className="me-2" />
           <strong>Cardiovita</strong>
         </Navbar.Brand>
-        <Navbar.Toggle
-          aria-controls="offcanvasNavbar-expand-sm"
-          onClick={() => setIsCollapsed(!isCollapsed)}
-        />
+
+        <Nav className="d-none d-lg-flex align-items-center gap-4 text-white fs-6">
+          {[{ path: "/inicio", icon: "house-door-fill", key: "inicio" },
+            { path: "/educacion", icon: "journal-text", key: "educacion" },
+            rolUsuario === "usuario" && { path: "/sintomas", icon: "thermometer-half", key: "sintomas" },
+            rolUsuario === "usuario" && { path: "/consultas", icon: "calendar-event-fill", key: "consultas" },
+            rolUsuario === "usuario" && { path: "/listdoc", icon: "file-person-fill", key: "doctores" },
+            rolUsuario === "doctor" && { path: "/chadoct", icon: "chat-left-text", key: "chat" },
+            rolUsuario === "doctor" && { path: "/docestado", icon: "file-earmark-person-fill", key: "estado" },
+            rolUsuario === "doctor" && { path: "/pacientes", icon: "people-fill", key: "pacientes" },
+            rolUsuario === "doctor" && { path: "/alertasderiesgo", icon: "exclamation-triangle-fill", key: "riesgo" }
+          ].filter(Boolean).map(({ path, icon, key }) => (
+            <Nav.Link onClick={() => handleNavigate(path)} className="nav-hover" key={key}>
+              <i className={`bi bi-${icon} me-1`}></i>{t(`menu.${key}`)}
+            </Nav.Link>
+          ))}
+
+          {rolUsuario === "usuario" && (
+            <NavDropdown title={<span className="nav-hover"><i className="bi bi-heart-pulse-fill me-1"></i>{t("menu.salud")}</span>} menuVariant="dark" className="fs-6">
+              <NavDropdown.Item onClick={() => handleNavigate("/presion")}> <i className="bi bi-heart-pulse me-1"></i>{t("menu.presion")}</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => handleNavigate("/graficos")}> <i className="bi bi-bar-chart me-1"></i>{t("menu.estadisticas")}</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => handleNavigate("/chat")}> <i className="bi bi-chat-left-text me-1"></i>{t("menu.chat")}</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => handleNavigate("/alertasmedicacion")}> <i className="bi bi-exclamation-triangle-fill me-1"></i>{t("menu.alertas")}</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => handleNavigate("/notificacionpaciente")}> <i className="bi bi-capsule me-1"></i>{t("menu.notificacion")}</NavDropdown.Item>
+            </NavDropdown>
+          )}
+
+          <NavDropdown title={<span className="nav-hover"><i className="bi bi-translate me-1"></i>{t("menu.idioma")}</span>} menuVariant="dark" className="fs-6">
+            <NavDropdown.Item onClick={() => cambiarIdioma("es")}>{t("menu.español")}</NavDropdown.Item>
+            <NavDropdown.Item onClick={() => cambiarIdioma("en")}>{t("menu.ingles")}</NavDropdown.Item>
+            <NavDropdown.Item onClick={() => cambiarIdioma("ja")}>{t("menu.japones")}</NavDropdown.Item>
+          </NavDropdown>
+
+          {isLoggedIn && (
+            <Nav.Link onClick={handleLogout} className="nav-hover"> <i className="bi bi-box-arrow-right me-1"></i>{t("menu.cerrarSesion")}</Nav.Link>
+          )}
+        </Nav>
+
+        <Navbar.Toggle aria-controls="offcanvasNavbar" onClick={() => setShow(true)} className="d-lg-none" />
+
         <Navbar.Offcanvas
-          id="offcanvasNavbar-expand-sm"
+          id="offcanvasNavbar"
+          aria-labelledby="offcanvasNavbarLabel"
           placement="end"
-          show={isCollapsed}
-          onHide={() => setIsCollapsed(false)}
+          show={show}
+          onHide={() => setShow(false)}
+          className="d-lg-none"
         >
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title className={isCollapsed ? "color-texto-marca" : "text-white"}>
-              {t("menu.menu")}
+            <Offcanvas.Title id="offcanvasNavbarLabel">
+              <i className="bi bi-heart-pulse me-2"></i>Cardiovita
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <Nav className="justify-content-end flex-grow-1 pe-3">
-              <Nav.Link onClick={() => handleNavigate("/inicio")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
-                {isCollapsed && <i className="bi-house-door-fill me-2"></i>}
-                <strong>{t("menu.inicio")}</strong>
-              </Nav.Link>
-
-              <Nav.Link onClick={() => handleNavigate("/educacion")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
-                {isCollapsed && <i className="bi bi-journal-text me-2"></i>}
-                <strong>{t("menu.educacion")}</strong>
-              </Nav.Link>
-
-              {rolUsuario === "usuario" && (
-                <>
-                  <Nav.Link onClick={() => handleNavigate("/sintomas")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
-                    {isCollapsed && <i className="bi bi-thermometer-half me-2"></i>}
-                    <strong>{t("menu.sintomas")}</strong>
-                  </Nav.Link>
-
-                  <Nav.Link onClick={() => handleNavigate("/consultas")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
-                    {isCollapsed && <i className="bi bi-calendar-fill me-2"></i>}
-                    <strong>{t("menu.consultas")}</strong>
-                  </Nav.Link>
-
-                  <Nav.Link onClick={() => handleNavigate("/listdoc")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
-                    {isCollapsed && <i className="bi bi-file-person-fill me-2"></i>}
-                    <strong>{t("menu.doctores")}</strong>
-                  </Nav.Link>
-
-                  <Nav.Link onClick={() => handleNavigate("/presion")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
-                    {isCollapsed && <i className="bi bi-heart-pulse-fill me-2"></i>}
-                    <strong>{t("menu.presion")}</strong>
-                  </Nav.Link>
-
-                  <Nav.Link onClick={() => handleNavigate("/graficos")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
-                    {isCollapsed && <i className="bi bi-bar-chart me-2"></i>}
-                    <strong>{t("menu.estadisticas")}</strong>
-                  </Nav.Link>
-
-                  <Nav.Link onClick={() => handleNavigate("/chat")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
-                    {isCollapsed && <i className="bi bi-chat-left-text me-2"></i>}
-                    <strong>{t("menu.chat")}</strong>
-                  </Nav.Link>
-
-                  <Nav.Link onClick={() => handleNavigate("/alertasmedicacion")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
-                    {isCollapsed && <i className="bi bi-exclamation-triangle-fill me-2"></i>}
-                    <strong>{t("menu.alertas")}</strong>
-                  </Nav.Link>
-
-                  <Nav.Link onClick={() => handleNavigate("/notificacionpaciente")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
-                    {isCollapsed && <i className="bi bi-capsule me-2"></i>}
-                    <strong>{t("menu.notificacion")}</strong>
-                  </Nav.Link>
-                </>
-              )}
-
-              {rolUsuario === "doctor" && (
-                <>
-                  <Nav.Link onClick={() => handleNavigate("/chadoct")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
-                    {isCollapsed && <i className="bi bi-chat-left-text me-2"></i>}
-                    <strong>{t("menu.chat")}</strong>
-                  </Nav.Link>
-
-                  <Nav.Link onClick={() => handleNavigate("/docestado")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
-                    {isCollapsed && <i className="bi bi-file-earmark-person-fill me-2"></i>}
-                    <strong>{t("menu.estado")}</strong>
-                  </Nav.Link>
-
-                  <Nav.Link onClick={() => handleNavigate("/pacientes")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
-                    {isCollapsed && <i className="bi bi-people me-2"></i>}
-                    <strong>{t("menu.pacientes")}</strong>
-                  </Nav.Link>
-
-                  <Nav.Link onClick={() => handleNavigate("/alertasderiesgo")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
-                    {isCollapsed && <i className="bi bi-exclamation-triangle-fill me-2"></i>}
-                    <strong>{t("menu.riesgo")}</strong>
-                  </Nav.Link>
-                </>
-              )}
-
-              {isLoggedIn && (
-                <Nav.Link onClick={handleLogout} className={isCollapsed ? "text-black" : "text-white"}>
-                  <i className="bi bi-box-arrow-right me-2"></i>
-                  {t("menu.cerrarSesion")}
+            <Nav className="flex-column text-start fs-5">
+              {[{ path: "/inicio", icon: "house-door-fill", key: "inicio" },
+                { path: "/educacion", icon: "journal-text", key: "educacion" },
+                rolUsuario === "usuario" && { path: "/sintomas", icon: "thermometer-half", key: "sintomas" },
+                rolUsuario === "usuario" && { path: "/consultas", icon: "calendar-event-fill", key: "consultas" },
+                rolUsuario === "usuario" && { path: "/listdoc", icon: "file-person-fill", key: "doctores" },
+                rolUsuario === "doctor" && { path: "/chadoct", icon: "chat-left-text", key: "chat" },
+                rolUsuario === "doctor" && { path: "/docestado", icon: "file-earmark-person-fill", key: "estado" },
+                rolUsuario === "doctor" && { path: "/pacientes", icon: "people-fill", key: "pacientes" },
+                rolUsuario === "doctor" && { path: "/alertasderiesgo", icon: "exclamation-triangle-fill", key: "riesgo" }
+              ].filter(Boolean).map(({ path, icon, key }) => (
+                <Nav.Link onClick={() => handleNavigate(path)} className="nav-hover" key={key}>
+                  <i className={`bi bi-${icon} me-2`}></i>{t(`menu.${key}`)}
                 </Nav.Link>
+              ))}
+              {rolUsuario === "usuario" && (
+                <NavDropdown title={<span><i className="bi bi-heart-pulse-fill me-2"></i>{t("menu.presion")}</span>} menuVariant="dark">
+                  <NavDropdown.Item onClick={() => handleNavigate("/presion")}> <i className="bi bi-heart-pulse me-2"></i>{t("menu.presion")}</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavigate("/graficos")}> <i className="bi bi-bar-chart me-2"></i>{t("menu.estadisticas")}</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavigate("/chat")}> <i className="bi bi-chat-left-text me-2"></i>{t("menu.chat")}</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavigate("/alertasmedicacion")}> <i className="bi bi-exclamation-triangle-fill me-2"></i>{t("menu.alertas")}</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavigate("/notificacionpaciente")}> <i className="bi bi-capsule me-2"></i>{t("menu.notificacion")}</NavDropdown.Item>
+                </NavDropdown>
               )}
-
-              <NavDropdown title={t("menu.idioma")} id="nav-dropdown" className="ms-3">
-                <NavDropdown.Item onClick={() => cambiarIdioma("es")}>
-                  {t("menu.español")}
-                </NavDropdown.Item>
-                <NavDropdown.Item onClick={() => cambiarIdioma("ja")}>
-                  {t("menu.japones")}
-                </NavDropdown.Item>
-                <NavDropdown.Item onClick={() => cambiarIdioma("en")}>
-                  {t("menu.ingles")}
-                </NavDropdown.Item>
+              <NavDropdown title={<span><i className="bi bi-translate me-2"></i>{t("menu.idioma")}</span>} menuVariant="dark">
+                <NavDropdown.Item onClick={() => cambiarIdioma("es")}>{t("menu.español")}</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => cambiarIdioma("en")}>{t("menu.ingles")}</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => cambiarIdioma("ja")}>{t("menu.japones")}</NavDropdown.Item>
               </NavDropdown>
+              {isLoggedIn && (
+                <Nav.Link onClick={handleLogout}> <i className="bi bi-box-arrow-right me-2"></i>{t("menu.cerrarSesion")}</Nav.Link>
+              )}
             </Nav>
           </Offcanvas.Body>
         </Navbar.Offcanvas>

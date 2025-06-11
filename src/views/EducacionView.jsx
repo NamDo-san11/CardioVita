@@ -46,7 +46,6 @@ const EducacionView = () => {
 
   return (
     <div className="p-4">
- 
       <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
       <h2 className="titulo-educacion-negro mb-0">Educación para la Salud</h2>
         
