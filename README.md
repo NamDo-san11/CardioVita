@@ -47,14 +47,14 @@ bash
 Copiar
 Editar
 - Visitanos en [**Nuestra Web**](https://github.com/Rocsanmenz)
-# Clona el repositorio
+### Clona el repositorio
 git clone [https://github.com/NamDo-san11/CardioVita.git](https://github.com/NamDo-san11/CardioVita.git)
 cd cardiovita
 
-# Instala dependencias
+### Instala dependencias
 npm install
 
-# Corre el entorno de desarrollo
+### Corre el entorno de desarrollo
 npm run dev
 Si aparecen errores, usar: npm install --force
 
