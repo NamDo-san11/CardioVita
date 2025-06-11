@@ -48,7 +48,7 @@ Copiar
 Editar
 - Visitanos en [**Nuestra Web**](https://github.com/Rocsanmenz)
 # Clona el repositorio
-git clone https://github.com/tuusuario/cardiovita.git
+git clone [https://github.com/NamDo-san11/CardioVita.git](https://github.com/NamDo-san11/CardioVita.git)
 cd cardiovita
 
 # Instala dependencias
