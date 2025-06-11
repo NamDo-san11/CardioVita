@@ -1,4 +1,4 @@
-💓 CardioVita
+# 💓 CardioVita
 CardioVita es una aplicación web orientada al monitoreo y control de la presión arterial. Está diseñada para ayudar a pacientes a registrar, visualizar y compartir sus mediciones con profesionales de la salud, facilitando un seguimiento continuo de su estado cardiovascular.
 
 👩‍⚕️ ¿Para qué sirve?
