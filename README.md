@@ -4,9 +4,9 @@ CardioVita es una aplicación web orientada al monitoreo y control de la presió
 ## 👩‍⚕️ ¿Para qué sirve?
 Registrar fácilmente lecturas de presión sistólica y diastólica.
 
-Visualizar gráficos con rangos de la OMS para interpretar los resultados.
+Visualizar tu progreso, para interpretar los resultados.
 
-Compartir reportes médicos de presión con especialistas.
+Teleconsultas entre pacientes y un especialista o doctor.
 
 Recibir alertas visuales si las mediciones están fuera de rango.
 
