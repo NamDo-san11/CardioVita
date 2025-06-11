@@ -62,7 +62,9 @@ Si aparecen errores, usar: npm install --force
  
 ## 🎖️ Agradecimientos especiales
 
-- 🔍 Elizabeth Castillo
+- 🔍 [Jonathán Moreno](https://github.com/jonathanquehay)
+- 🐁 [César Vargas](https://github.com/Crisvargasmz)
+- 💊 [Elieth Umaña](https://github.com/jonathanquehay)
 - 🧭 [María Ríos](https://github.com/mariajorlenis)
 - 🥶 [Daniela Baltodano](https://github.com/DanielaBaltodano)
 - 👾 [Yamil Garcia](https://github.com/Yamilgarcia) 
