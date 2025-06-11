@@ -156,10 +156,11 @@ const Graficos = ({ registros, rolUsuario }) => {
             <Bar key={filtro + anchoVentana} data={data} options={options} />
           </div>
 
-          <div className="export-buttons" style={{ marginTop: "20px", textAlign: "center" }}>
-            <button onClick={exportarPDF}>Exportar PDF</button>
-            <button onClick={exportarExcel}>Exportar Excel</button>
-          </div>
+        <div className="botones-exportar">
+        <button className="boton-exportar" onClick={exportarPDF}>Exportar PDF</button>
+        <button className="boton-exportar" onClick={exportarExcel}>Exportar Excel</button>
+      </div>
+
         </>
       ) : (
         <p style={{ textAlign: "center", color: "#888", fontSize: "18px", marginTop: "40px" }}>

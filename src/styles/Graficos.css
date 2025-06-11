@@ -57,3 +57,27 @@
     max-width: 240px;
   }
 }
+.botones-exportar {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.boton-exportar {
+  padding: 10px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid #00cfff;
+  border-radius: 8px;
+  background-color: transparent;
+  color: #00cfff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.boton-exportar:hover {
+  background-color: #00cfff;
+  color: white;
+}
